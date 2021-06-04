@@ -9,6 +9,7 @@ use App\Http\Controllers\FaenaController;
 use App\Http\Controllers\MachineController;
 use App\Http\Controllers\VariedadController;
 use App\Http\Controllers\ProductorController;
+use App\Http\Controllers\TemporadaController;
 use App\Http\Controllers\TipoCultivoController;
 
 /*

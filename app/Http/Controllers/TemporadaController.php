@@ -2,40 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Temporada;
 use Illuminate\Http\Request;
 
 class TemporadaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return Inertia::render('Temporada/Index', [
+            'temporadas' => Temporada::orderBy('id', 'desc')
+            ->where('nombre', 'LIKE' , "%$request->search%")
+            ->simplePaginate(6)
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create()
     {
-        //
+        return Inertia::render('Temporada/Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required',
+            'pais' => 'required',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required'
+        ]);
+        
+        $temporada = Temporada::create($request->all());
+    
+        if($temporada){
+            return redirect()->route('temporada.index')->with('message' , 'Temporada Registrada');
+        }else{
+            return redirect()->route('temporada.index')->with('message' , '¡Error!');
+        }
     }
 
     /**
@@ -57,19 +60,28 @@ class TemporadaController extends Controller
      */
     public function edit(Temporada $temporada)
     {
-        //
+        return Inertia::render('Temporada/Edit',[
+            'temporada' => $temporada
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Temporada  $temporada
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, Temporada $temporada)
     {
-        //
+        $request->validate([
+            'nombre' => 'required',
+            'pais' => 'required',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required'
+        ]);
+
+        $temporada->update($request->all());
+
+        if($temporada){
+            return redirect()->route('temporada.index')->with('message' , 'Temporada Editada');
+        }else{
+            return redirect()->route('temporada.index')->with('message' , '¡Error!');
+        }
     }
 
     /**
@@ -80,6 +92,10 @@ class TemporadaController extends Controller
      */
     public function destroy(Temporada $temporada)
     {
-        //
+        if($temporada->delete()){
+            return redirect()->route('temporada.index')->with('message' , 'Temporada Eliminada');
+        }else{
+            return redirect()->route('temporada.index')->with('message' , '¡Error!');
+        }
     }
 }

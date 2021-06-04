@@ -2,7 +2,7 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Módulo de Variedades
+                Módulo de Temporadas
             </h2>
         </template>
 
@@ -11,15 +11,15 @@
                 <div class="md:grid md:grid-cols-4 md:gap-6">
                     <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
-                            <h3 class="text-lg text-gray-900">Listado de Variedades</h3>
+                            <h3 class="text-lg text-gray-900">Listado de Temporadas</h3>
                         </div>
                     </div>
                     <div class="md:col-span-3 mt-5 md:mt-0">
                         <div class="shadow bg-white md:rounded-md p-4">
                             <div class="flex justify-between items-center">
                                 <input type="text" class="form-input rounded-md shadow-md p-2 m-1" placeholder="Buscar..." v-model="search">
-                                <inertia-link :href="route('variedad.create')" class="bg-blue-500 hover:bg-blue-700 p-3 rounded font-bold text-white">
-                                    Crear Variedad
+                                <inertia-link :href="route('temporada.create')" class="bg-blue-500 hover:bg-blue-700 p-3 rounded font-bold text-white">
+                                    Crear Temporada
                                 </inertia-link>
                             </div>
                             <hr class="my-6">
@@ -27,33 +27,43 @@
                                 <thead>
                                     <tr>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Nombre</th>
-                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">T. Cultivo</th>
+                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">País</th>
+                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Fecha Inicio</th>
+                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Fecha Final</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(variedad,i) in variedads.data" :key="i" class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+                                    <tr v-for="(temporada,i) in temporadas.data" :key="i" class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Nombre</span>
-                                            {{ variedad.nombre }}
+                                            {{ temporada.nombre }}
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">T. Cultivo</span>
-                                            {{ variedad.tipo_cultivo }}
+                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">País</span>
+                                            {{ temporada.pais }}
+                                        </td>
+                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
+                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">F. Inicio</span>
+                                            {{ temporada.fecha_inicio }}
+                                        </td>
+                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
+                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">F. Final</span>
+                                            {{ temporada.fecha_fin }}
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Acción</span>
-                                            <inertia-link class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('variedad.edit',variedad.id)">
+                                            <inertia-link class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('temporada.edit',temporada.id)">
                                                 Editar
                                             </inertia-link>
-                                            <a class="text-blue-400 hover:text-blue-600 underline m-2" href="#" @click="confirmDeleteData(variedad.id)">
+                                            <a class="text-blue-400 hover:text-blue-600 underline m-2" href="#" @click="confirmDeleteData(temporada.id)">
                                                 Eliminar
                                             </a>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <pagination class="mt-6" :data="variedads" />
+                            <pagination class="mt-6" :data="temporadas" />
                         </div>
                     </div>
                 </div>
@@ -62,11 +72,11 @@
         <!-- Delete Account Confirmation Modal -->
         <jet-dialog-modal :show="confirmDelete" @close="closeModal">
             <template #title>
-                Borrar Variedad
+                Borrar Temporada
             </template>
 
             <template #content>
-                ¿Estás seguro de que quieres Eliminar esta Variedad?
+                ¿Estás seguro de que quieres Eliminar esta Temporada?
             </template>
 
             <template #footer>
@@ -99,7 +109,7 @@
             JetSecondaryButton
         },
         props : {
-            variedads : Object,
+            temporadas : Object,
         },
         data() 
         {
@@ -126,7 +136,7 @@
             },
             deleteTipo(){
 
-                Inertia.delete(this.route('variedad.destroy' , this.id), {
+                Inertia.delete(this.route('temporada.destroy' , this.id), {
                     preserveScroll: true,
                     onSuccess: () => {
                         this.search = '';
@@ -137,7 +147,7 @@
         },
         watch : {
             search : function (value) {
-                this.$inertia.replace(this.route('variedad.index', {
+                this.$inertia.replace(this.route('temporada.index', {
                     search : value
                 }));
             }
