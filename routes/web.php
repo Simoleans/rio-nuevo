@@ -9,6 +9,7 @@ use App\Http\Controllers\FaenaController;
 use App\Http\Controllers\MachineController;
 use App\Http\Controllers\VariedadController;
 use App\Http\Controllers\ProductorController;
+use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\TemporadaController;
 use App\Http\Controllers\TipoCultivoController;
 
@@ -42,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/faena',FaenaController::class);
     Route::put('/finalizarFaena/{faena}',[FaenaController::class,'disabledFaena'])->name('disabledFaena');
     Route::resource('/temporada',TemporadaController::class);
+    Route::resource('/reporte',ReporteController::class);
 });
 
 

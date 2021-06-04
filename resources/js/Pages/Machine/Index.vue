@@ -64,7 +64,7 @@
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Status</span>
-                                            <span class="rounded bg-red-400 py-1 px-3 text-xs font-bold">{{ machine.status }}</span>
+                                            <span :class="{'bg-green-400' : machine.status == 1,'bg-red-400' : machine.status == 0}" class="rounded py-1 px-3 text-xs font-bold" v-text="machine.status == 1 ? 'Activa' : 'Inactiva'"></span>
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Acción</span>

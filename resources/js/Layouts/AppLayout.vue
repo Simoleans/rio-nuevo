@@ -21,7 +21,7 @@
                                     Inicio
                                 </jet-nav-link>
                                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <jet-nav-link :href="route('machine.index')" :active="route().current('machine.*')">
+                                <jet-nav-link :href="route('reporte.index')" :active="route().current('reporte.*')">
                                     Reportes
                                 </jet-nav-link>
                                 <jet-nav-link :href="route('faena.index')" :active="route().current('faena.*')">
