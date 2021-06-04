@@ -18,23 +18,20 @@
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
+                                    Inicio
                                 </jet-nav-link>
                                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <jet-nav-link :href="route('machine.index')" :active="route().current('machine.*')">
-                                    Maquinas
+                                    Reportes
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('productors.index')" :active="route().current('productors.*')">
-                                    Productores
+                                <jet-nav-link :href="route('faena.index')" :active="route().current('faena.*')">
+                                    Faena
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('tipoCultivo.index')" :active="route().current('tipoCultivo.*')">
-                                    Tipo Cultivo
+                                <jet-nav-link :href="route('usuario.index')" :active="route().current('usuario.*')">
+                                    Usuarios
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('campo.index')" :active="route().current('campo.*')">
-                                    Campos
-                                </jet-nav-link>
-                                <jet-nav-link :href="route('variedad.index')" :active="route().current('variedad.*')">
-                                    Variedad
+                                <jet-nav-link :href="route('temporada.index')" :active="route().current('temporada.*')">
+                                    Temporadas
                                 </jet-nav-link>
                             </div>
                             </div>
@@ -125,16 +122,32 @@
                                             Perfil
                                         </jet-dropdown-link>
 
-                                        <jet-dropdown-link :href="route('usuario.index')">
-                                            Usuarios
-                                        </jet-dropdown-link>
-
-                                        <jet-dropdown-link :href="route('faena.index')">
-                                            Faenas
-                                        </jet-dropdown-link>
-
                                         <jet-dropdown-link :href="route('api-tokens.index')" v-if="$page.props.jetstream.hasApiFeatures">
                                             API Tokens
+                                        </jet-dropdown-link>
+                                        
+                                        <div class="border-t border-gray-100"></div>
+                                        <div class="block px-4 py-2 text-xs text-gray-400">
+                                            Datos
+                                        </div>
+                                        <jet-dropdown-link :href="route('machine.index')">
+                                            Maquinas
+                                        </jet-dropdown-link>
+
+                                        <jet-dropdown-link :href="route('productors.index')">
+                                            Productores
+                                        </jet-dropdown-link>
+
+                                        <jet-dropdown-link :href="route('tipoCultivo.index')">
+                                            T. Cultivo
+                                        </jet-dropdown-link>
+
+                                        <jet-dropdown-link :href="route('campo.index')">
+                                            Campo
+                                        </jet-dropdown-link>
+
+                                        <jet-dropdown-link :href="route('variedad.index')">
+                                            Variedad
                                         </jet-dropdown-link>
 
                                         <div class="border-t border-gray-100"></div>

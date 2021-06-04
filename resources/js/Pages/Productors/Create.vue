@@ -109,7 +109,7 @@
                     Inertia.post('/productors', {...form})
                 }
 
-                return {form,storeData,options}
+                return {form,storeData}
         }
     }
 

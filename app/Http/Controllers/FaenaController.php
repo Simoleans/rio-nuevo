@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Faena;
+use App\Models\Machine;
+use App\Models\Productor;
+use App\Models\Campo;
 use Illuminate\Http\Request;
 
 class FaenaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    
+    public function index(Request $request)
     {
-        //
+        return Inertia::render('Faena/Index', [
+            'faenas' => Faena::orderBy('id', 'desc')
+            ->where('maquina', 'LIKE' , "%$request->search%")
+            ->simplePaginate(6)
+        ]);
     }
 
     /**
@@ -24,7 +28,11 @@ class FaenaController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Faena/Create',[
+            'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
+            'campo' => Campo::orderBy('id', 'desc')->get('nombre'),
+            'maquina' => Machine::orderBy('id', 'desc')->get('nombre')
+        ]);
     }
 
     /**
@@ -35,7 +43,23 @@ class FaenaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'productor' => 'required',
+            'campo' => 'required',
+            'maquina' => 'required',
+            'fecha_inicio' => 'required',
+            'fecha_final' => 'required',
+        ]);
+
+        $request->merge(['user_id' => auth()->user()->id]);
+
+        $faena = Faena::create($request->all());
+        
+        if($faena){
+            return redirect()->route('faena.index')->with('message' , 'Faena Registrada');
+        }else{
+            return redirect()->route('faena.index')->with('message' , '¡Error!');
+        }
     }
 
     /**
@@ -57,7 +81,12 @@ class FaenaController extends Controller
      */
     public function edit(Faena $faena)
     {
-        //
+        return Inertia::render('Faena/Edit',[
+            'faena' => $faena,
+            'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
+            'campo' => Campo::orderBy('id', 'desc')->get('nombre'),
+            'maquina' => Machine::orderBy('id', 'desc')->get('nombre')
+        ]);
     }
 
     /**
@@ -69,7 +98,21 @@ class FaenaController extends Controller
      */
     public function update(Request $request, Faena $faena)
     {
-        //
+        $request->validate([
+            'productor' => 'required',
+            'campo' => 'required',
+            'maquina' => 'required',
+            'fecha_inicio' => 'required',
+            'fecha_final' => 'required',
+        ]);
+
+        $faena->update($request->all());
+
+        if($faena){
+            return redirect()->route('faena.index')->with('message' , 'Faena Editada');
+        }else{
+            return redirect()->route('faena.index')->with('message' , '¡Error!');
+        }
     }
 
     /**
@@ -80,6 +123,10 @@ class FaenaController extends Controller
      */
     public function destroy(Faena $faena)
     {
-        //
+        if($faena->delete()){
+            return redirect()->route('faena.index')->with('message' , 'Faena Eliminada');
+        }else{
+            return redirect()->route('faena.index')->with('message' , '¡Error!');
+        }
     }
 }

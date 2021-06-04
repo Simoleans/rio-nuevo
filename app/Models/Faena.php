@@ -15,7 +15,8 @@ class Faena extends Model
         'maquina',
         'fecha_inicio',
         'fecha_final',
-        'status'
+        'status',
+        'user_id'
     ];
 
     public function scopeProceso($query){
