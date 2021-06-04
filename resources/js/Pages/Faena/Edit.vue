@@ -18,6 +18,10 @@
                     <div class="md:col-span-2 mt-5 md:mt-0">
                         <div class="shadow bg-white md:rounded-md p-4">
                             <form @submit.prevent="updateData">
+                                <jet-label for="temporada" value="Temporada (*)" />
+                                <Select2 required v-model="form.temporada" :options="temporadaOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                <jet-input-error :message="errors.temporada" class="mt-2" />
+
                                 <jet-label for="productor" value="Productor (*)" />
                                 <Select2 required v-model="form.productor" :options="productorOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
                                 <jet-input-error :message="errors.productor" class="mt-2" />
@@ -82,7 +86,8 @@
             faena : Object,
             productor : Object,
             campo : Object,
-            maquina : Object
+            maquina : Object,
+            temporada : Object
         },
         setup(props) {
                 const form =  reactive({
@@ -96,6 +101,7 @@
                 const productorOpt = [];
                 const campoOpt = [];
                 const maquinaOpt = [];
+                const temporadaOpt = [];
 
                 props.productor.forEach( function(element) {
                     productorOpt.push({'id' : element.razon_social,'text' : element.razon_social})
@@ -109,6 +115,9 @@
                     maquinaOpt.push({'id' : element.nombre,'text' : element.nombre})
                 });
 
+                props.temporada.forEach( function(element) {
+                    temporadaOpt.push({'id' : element.nombre,'text' : element.nombre})
+                });
 
                 const updateData = () => {
                     if (form.fecha_inicio > form.fecha_final) {
@@ -118,7 +127,7 @@
                     }
                 }
 
-                return {form,updateData,productorOpt,campoOpt,maquinaOpt}
+                return {form,updateData,productorOpt,campoOpt,maquinaOpt,temporadaOpt}
         }
     }
 </script>

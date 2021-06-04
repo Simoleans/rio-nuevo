@@ -7,6 +7,7 @@ use App\Models\Faena;
 use App\Models\Machine;
 use App\Models\Productor;
 use App\Models\Campo;
+use App\Models\Temporada;
 use Illuminate\Http\Request;
 
 class FaenaController extends Controller
@@ -31,7 +32,8 @@ class FaenaController extends Controller
         return Inertia::render('Faena/Create',[
             'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
             'campo' => Campo::orderBy('id', 'desc')->get('nombre'),
-            'maquina' => Machine::orderBy('id', 'desc')->get('nombre')
+            'maquina' => Machine::orderBy('id', 'desc')->get('nombre'),
+            'temporada' => Temporada::orderBy('id', 'desc')->get('nombre'),
         ]);
     }
 
@@ -49,6 +51,7 @@ class FaenaController extends Controller
             'maquina' => 'required',
             'fecha_inicio' => 'required',
             'fecha_final' => 'required',
+            'temporada' => 'required'
         ]);
 
         $request->merge(['user_id' => auth()->user()->id]);
@@ -85,7 +88,8 @@ class FaenaController extends Controller
             'faena' => $faena,
             'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
             'campo' => Campo::orderBy('id', 'desc')->get('nombre'),
-            'maquina' => Machine::orderBy('id', 'desc')->get('nombre')
+            'maquina' => Machine::orderBy('id', 'desc')->get('nombre'),
+            'temporada' => Temporada::orderBy('id', 'desc')->get('nombre'),
         ]);
     }
 
@@ -104,6 +108,7 @@ class FaenaController extends Controller
             'maquina' => 'required',
             'fecha_inicio' => 'required',
             'fecha_final' => 'required',
+            'temporada' => 'required'
         ]);
 
         $faena->update($request->all());
@@ -125,6 +130,17 @@ class FaenaController extends Controller
     {
         if($faena->delete()){
             return redirect()->route('faena.index')->with('message' , 'Faena Eliminada');
+        }else{
+            return redirect()->route('faena.index')->with('message' , '¡Error!');
+        }
+    }
+
+    public function disabledFaena(Request $request, Faena $faena)
+    {
+        $faena->status = 0;
+
+        if($faena->update()){
+            return redirect()->route('faena.index')->with('message' , 'Faena Finalizada');
         }else{
             return redirect()->route('faena.index')->with('message' , '¡Error!');
         }

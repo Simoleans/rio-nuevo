@@ -26,6 +26,7 @@
                             <table class="border-collapse w-full">
                                 <thead>
                                     <tr>
+                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Temporada</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Productor</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Maquina</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Campo</th>
@@ -37,6 +38,10 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(faena,i) in faenas.data" :key="i" class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+                                        <td @click="showData({...faena})" class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
+                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Temporada</span>
+                                            {{ faena.temporada }}
+                                        </td>
                                         <td @click="showData({...faena})" class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Productor</span>
                                             {{ faena.productor }}
@@ -183,7 +188,9 @@
                 setTimeout(() => this.processing = false, 850)
             },
             finishFaena(id){
-                alert("dkshfs")
+                Inertia.put(route('disabledFaena',id),{
+                    onSuccess : () => this.closeModal()
+                });
             },
             closeModalShow() {
                 this.id = null;

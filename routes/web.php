@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/variedad',VariedadController::class);
     Route::resource('/usuario',UserController::class);
     Route::resource('/faena',FaenaController::class);
+    Route::put('/finalizarFaena/{faena}',[FaenaController::class,'disabledFaena'])->name('disabledFaena');
     Route::resource('/temporada',TemporadaController::class);
 });
 
