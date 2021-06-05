@@ -144,4 +144,29 @@ class ReporteController extends Controller
             return redirect()->route('reporte.index')->with('message' , '¡Error!');
         }
     }
+
+    public function enableReporte(Reporte $reporte)
+    {
+        $reporte->status = 1;
+
+        if($reporte->update()){
+            return redirect()->route('reporte.index')->with('message' , 'Reporte Habilitado');
+        }else{
+            return redirect()->route('reporte.index')->with('message' , '¡Error!');
+        }
+    }
+
+    public function clone(Request $request)
+    {
+
+        $request->merge(['user_id' => auth()->user()->id]);
+
+        $reporte = Reporte::create($request->except(['id','status']));
+        
+        if($reporte){
+            return redirect()->route('reporte.index')->with('message' , '¡Reporte Clonado Exitosamente!');
+        }else{
+            return redirect()->route('reporte.index')->with('message' , '¡Error!');
+        }
+    }
 }

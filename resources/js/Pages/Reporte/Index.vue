@@ -122,7 +122,7 @@
                 <jet-button v-show="modal.status == 0" class="bg-green-400 hover:bg-green-500 mr-2" @click="cloneReport({...modal})">
                     Clonar Reporte
                 </jet-button>
-                <jet-button v-show="modal.status == 0" :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishreporte(modal.id)">
+                <jet-button v-show="modal.status == 0" :class="{ 'opacity-25': processing }" :disabled="processing" @click="enableReporte(modal.id)">
                     Activar Reporte
                 </jet-button>
                 <jet-danger-button  v-show="modal.status == 1"  :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishreporte(modal.id)">
@@ -198,13 +198,20 @@
                     onSuccess : () => this.closeModalShow()
                 });
             },
+            enableReporte(id){
+                Inertia.put(route('reporte.enable',id));
+
+                this.closeModalShow();
+            },
+            cloneReport(data){
+                Inertia.post(this.route('reporte.clone' , {...data}))
+
+                this.closeModalShow();
+            },
             closeModalShow() {
                 this.id = null;
                 this.showModalData = false;
                 this.processing = false;
-            },
-            cloneReport(data){
-                console.log(data)
             }
         },
         watch : {
