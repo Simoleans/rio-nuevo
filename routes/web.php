@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/finalizarFaena/{faena}',[FaenaController::class,'disabledFaena'])->name('disabledFaena');
     Route::resource('/temporada',TemporadaController::class);
     Route::resource('/reporte',ReporteController::class);
+    Route::get('/reporte/excel/{reporte}',[ReporteController::class,'excel'])->name('reporte.excel');
 });
 
 

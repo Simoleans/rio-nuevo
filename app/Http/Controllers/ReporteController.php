@@ -6,10 +6,12 @@ use Inertia\Inertia;
 use App\Models\Campo;
 use App\Models\Machine;
 use App\Models\Reporte;
+use App\Models\Variedad;
 use App\Models\Productor;
 use App\Models\TipoCultivo;
-use App\Models\Variedad;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ReporteExport;
 
 class ReporteController extends Controller
 {
@@ -123,5 +125,10 @@ class ReporteController extends Controller
     public function destroy(Reporte $reporte)
     {
         //
+    }
+
+    public function excel(Reporte $reporte)
+    {
+        return Excel::download(new ReporteExport, 'users.xlsx');
     }
 }

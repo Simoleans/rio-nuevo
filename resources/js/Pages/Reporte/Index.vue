@@ -58,12 +58,12 @@
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Acción</span>
-                                            <!-- <inertia-link class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.edit',reporte.id)">
-                                                Editar
-                                            </inertia-link> -->
-                                            <a class="text-blue-400 hover:text-blue-600 underline m-2" href="#" @click="confirmDeleteData(reporte.id)">
+                                            <a class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.excel',reporte.id)">
                                                 Reporte Excel
                                             </a>
+                                            <!-- <a class="text-blue-400 hover:text-blue-600 underline m-2"  @click="reportExcel(reporte.id)">
+                                                Reporte Excel
+                                            </a> -->
                                         </td>
                                     </tr>
                                 </tbody>
@@ -203,6 +203,9 @@
                 this.showModalData = false;
                 this.processing = true;
             },
+            reportExcel(id){
+                Inertia.get(route('reporte.excel'),id);
+            }
         },
         watch : {
             search : function (value) {
