@@ -135,7 +135,7 @@ class FaenaController extends Controller
         }
     }
 
-    public function disabledFaena(Request $request, Faena $faena)
+    public function disabledFaena(Faena $faena)
     {
         $faena->status = 0;
 

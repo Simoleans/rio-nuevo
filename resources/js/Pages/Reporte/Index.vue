@@ -16,8 +16,11 @@
                     </div>
                     <div class="md:col-span-3 mt-5 md:mt-0">
                         <div class="shadow bg-white md:rounded-md p-4">
-                            <div class="flex justify-between items-center">
-                                <input type="text" class="form-input rounded-md shadow-md p-2 m-1" placeholder="Buscar..." v-model="search">
+                            <div class="flex justify-between items-center gap-6">
+                                <input type="text" class="form-input rounded-md shadow-md p-2 m-1 flex-1" placeholder="Buscar..." v-model="search">
+                                <a v-if="reportes.data.length > 0" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('excelExport')">
+                                    Descargar
+                                </a>
                                 <inertia-link :href="route('reporte.create')" class="bg-blue-500 hover:bg-blue-700 p-3 rounded font-bold text-white">
                                     Crear Reporte
                                 </inertia-link>
@@ -31,7 +34,6 @@
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Campo</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">T. Bandeja</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Estatus</th>
-                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -55,15 +57,6 @@
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Status</span>
                                             <span :class="{'bg-green-400' : reporte.status == 1,'bg-red-400' : reporte.status == 0}" class="rounded py-1 px-3 text-xs font-bold" v-text="reporte.status == 1 ? 'Activa' : 'Finalizada'"></span>
-                                        </td>
-                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Acción</span>
-                                            <a class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.excel',reporte.id)">
-                                                Reporte Excel
-                                            </a>
-                                            <!-- <a class="text-blue-400 hover:text-blue-600 underline m-2"  @click="reportExcel(reporte.id)">
-                                                Reporte Excel
-                                            </a> -->
                                         </td>
                                     </tr>
                                 </tbody>
@@ -89,8 +82,8 @@
                     Cancelar
                 </jet-secondary-button>
 
-                <jet-danger-button class="ml-2" @click="deletereporte" :class="{ 'opacity-25': processing }" :disabled="processing">
-                    Eliminar
+                <jet-danger-button class="ml-2" @click="finishreporte(modal.id)" :class="{ 'opacity-25': processing }" :disabled="processing">
+                    Finalizar Reporte
                 </jet-danger-button>
             </template>
         </jet-dialog-modal>
@@ -173,7 +166,7 @@
 
                 this.confirmDelete = true;
 
-                setTimeout(() => this.processing = false, 950)
+                setTimeout(() => this.processing = false, 1100)
             },
             closeModal() {
 
@@ -194,18 +187,15 @@
                 setTimeout(() => this.processing = false, 850)
             },
             finishreporte(id){
-                Inertia.put(route('disabledreporte',id),{
-                    onSuccess : () => this.closeModal()
+                Inertia.put(route('disabledReporte',id),{
+                    onSuccess : () => this.closeModalShow()
                 });
             },
             closeModalShow() {
                 this.id = null;
-                this.showModalData = false;
+                this.showModalData = true;
                 this.processing = true;
             },
-            reportExcel(id){
-                Inertia.get(route('reporte.excel'),id);
-            }
         },
         watch : {
             search : function (value) {

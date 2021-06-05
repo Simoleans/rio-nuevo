@@ -127,8 +127,21 @@ class ReporteController extends Controller
         //
     }
 
-    public function excel(Reporte $reporte)
+    public function excelExport()
     {
-        return Excel::download(new ReporteExport, 'users.xlsx');
+        $query = Reporte::active()->get();
+
+        return Excel::download(new ReporteExport($query), 'reportes'.date('dmyhs').'.xlsx');
+    }
+
+    public function disabledReporte(Reporte $reporte)
+    {
+        $reporte->status = 0;
+
+        if($reporte->update()){
+            return redirect()->route('reporte.index')->with('message' , 'Reporte Anulado');
+        }else{
+            return redirect()->route('reporte.index')->with('message' , '¡Error!');
+        }
     }
 }

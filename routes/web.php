@@ -25,15 +25,15 @@ use App\Http\Controllers\TipoCultivoController;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('Auth/Login', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('loginView');
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum','user-inactive'])->group(function () {
     Route::resource('/machine',MachineController::class);
     Route::resource('/productors',ProductorController::class);
     Route::resource('/tipoCultivo',TipoCultivoController::class);
@@ -44,10 +44,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/finalizarFaena/{faena}',[FaenaController::class,'disabledFaena'])->name('disabledFaena');
     Route::resource('/temporada',TemporadaController::class);
     Route::resource('/reporte',ReporteController::class);
-    Route::get('/reporte/excel/{reporte}',[ReporteController::class,'excel'])->name('reporte.excel');
+    Route::get('/reporte/excel/export',[ReporteController::class,'excelExport'])->name('excelExport');
+    Route::put('/finalizarReporte/{reporte}',[ReporteController::class,'disabledReporte'])->name('disabledReporte');
 });
 
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+Route::middleware(['auth:sanctum', 'verified','user-inactive'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');

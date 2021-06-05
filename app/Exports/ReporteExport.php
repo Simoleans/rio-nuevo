@@ -8,19 +8,24 @@ use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 
 
-class ReporteExport implements FromView, ShouldAutoSize, WithEvents
+class ReporteExport implements FromView, ShouldAutoSize, WithEvents,WithDrawings
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
+    protected $query;
+
+    public function __construct($query)
+    {
+        $this->query = $query;
+    }
     public function view(): View
     {
-
+        
         return view('reporte.excel', [
-            'reportes' => Reporte::all()
+            'reportes' => $this->query
 
         ]);
     }
@@ -30,16 +35,17 @@ class ReporteExport implements FromView, ShouldAutoSize, WithEvents
         return [
             AfterSheet::class => function (AfterSheet $event) {
 
-                // Todo el diseño del header
-                $cellRange         = 'A2:M3'; //datos
-                $cellRangeAll = 'A1:M1'; // header table estacion
+                $c = count($this->query) + 6;
+                
+                $cellRange = 'A6:Q'.$c;
+                $cellRangeAll = 'A6:Q6'; // header table estacion
 
                 $styleArrayAll = [ //encabezado
                     'font'      => [
                         'bold' => true,
                     ],
                     'alignment' => [
-                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                     ],
 
                     'borders'   => [
@@ -54,7 +60,6 @@ class ReporteExport implements FromView, ShouldAutoSize, WithEvents
                         'startColor' => [
                             'argb' => 'FFE699',
                         ],
-
                     ],
                 ];
 
@@ -75,21 +80,37 @@ class ReporteExport implements FromView, ShouldAutoSize, WithEvents
                         'fillType'   => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                         'rotation'   => 10,
                         'startColor' => [
-                            'argb' => '24782c',
+                            'argb' => '569E43',
                         ],
 
                     ],
 
                 ];
-                $event->sheet->getColumnDimension('A')->setAutoSize(true);
+
+                $event->sheet->getDefaultColumnDimension('A:6')->setWidth(42);
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($styleArray)->getFont()->setSize(12);
+                $event->sheet->getHeaderFooter()
+                    ->setOddHeader('¡Reportes RIO NUEVO!');
+                $event->sheet->getHeaderFooter()
+                    ->setOddFooter('&L&B' . $event->sheet->getTitle() . '&Pagína &P of &N');
+                
                 $event->sheet->getDelegate()->getStyle($cellRangeAll)->applyFromArray($styleArrayAll)->getFont()->setSize(12);
                 $event->sheet->getTabColor()->setRGB('FF0000');
-
-                //fin header
+                $event->sheet->setTitle('Reportes');
 
             },
 
         ];
+    }
+
+    public function drawings(){
+        $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $drawing->setName('Logo');
+                $drawing->setDescription('Rio nuevo');
+                $drawing->setPath(public_path('img\logo.jpg'));
+                $drawing->setHeight(90);
+                $drawing->setCoordinates('A1');
+
+                return $drawing;
     }
 }

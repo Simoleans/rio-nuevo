@@ -27,4 +27,19 @@ class Reporte extends Model
             'observacion',
             'status'
     ];
+
+
+    public function scopeActive($query){
+        return $query->where('status',1);
+    }
+
+    public function maquina(){
+        return Machine::where('nombre',$this->maquina)->first();
+    }
+
+    // public function horasDelta(){
+
+    //     $afterReport = Reporte::orderBy('id', 'desc')->where('id','!=',$this->id)->first();
+    //     dd($afterReport);
+    // }
 }
