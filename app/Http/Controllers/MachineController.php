@@ -56,6 +56,7 @@ class MachineController extends Controller
     
     public function edit(Machine $machine)
     {
+        dd("kshskh");
         return Inertia::render('Machine/Edit',[
             'machine' => $machine
         ]);

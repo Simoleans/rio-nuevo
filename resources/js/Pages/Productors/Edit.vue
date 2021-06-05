@@ -2,7 +2,7 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Módulo de Notas
+                Módulo de Productores
             </h2>
         </template>
 
@@ -11,7 +11,7 @@
                 <div class="md:grid md:grid-cols-3 md:gap-6">
                     <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
-                            <h3 class="text-lg text-gray-900">Editar Maquina</h3>
+                            <h3 class="text-lg text-gray-900">Editar Productor</h3>
                             <p class="text-sm text-gray-500">(*) Campos Requeridos</p>
                         </div>
                     </div>
