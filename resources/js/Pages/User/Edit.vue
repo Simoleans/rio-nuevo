@@ -27,8 +27,12 @@
                                 <jet-input-error :message="errors.email" class="mt-2" />
 
                                 <jet-label for="rol" value="Rol (*)" />
-                                <select-input :errors="errors.rol" :model="form.rol" :options="options" />
+                                <Select2 v-model="form.rol" :options="options" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
                                 <jet-input-error :message="errors.rol" class="mt-2" />
+
+                                <jet-label for="status" value="Estatus (*)" />
+                                <Select2 v-model="form.status" :options="optionsStatus" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                <jet-input-error :message="errors.status" class="mt-2" />
 
                                 <div class="flex justify-end gap-2 mt-2 items-center">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
@@ -55,7 +59,7 @@
     import JetInputError from '@/Jetstream/InputError'
     import JetInput from '@/Jetstream/Input'
     import JetLabel from '@/Jetstream/Label'
-    import SelectInput from '@/components/SelectInput'
+    import Select2 from 'vue3-select2-component';
     
 
     export default {
@@ -64,7 +68,7 @@
             JetInputError,
             JetInput,
             JetLabel,
-            SelectInput
+            Select2
         },
         props: {
             errors: Object,
@@ -74,20 +78,32 @@
                 const form =  reactive({
                     name: props.user.name,
                     email: props.user.email,
-                    rol : props.user.rol
+                    rol : props.user.rol,
+                    status : props.user.status
                 });
 
                 const options = [
-                        { text: 'Administrador', value: 'admin' },
-                        { text: 'Operador', value: 'operador' }
+                        { text: 'Administrador', id: 'admin' },
+                        { text: 'Operador', id: 'operador' }
+                    ];
+
+                    const optionsStatus = [
+                        { text: 'Habilitar', id: 1 },
+                        { text: 'Deshabilitar', id: 0 }
                     ];
 
                 const updateData = () => {
                     Inertia.put(route('usuario.update',props.user.id), {...form});
                 }
 
-                return {form,updateData,options}
+                return {form,updateData,options,optionsStatus}
         }
     }
 
 </script>
+<style>
+    .select2-container .select2-selection--single {
+        height: 38px !important;
+        padding-top: 3px;
+    }
+</style>
