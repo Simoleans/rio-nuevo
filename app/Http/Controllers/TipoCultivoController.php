@@ -34,7 +34,7 @@ class TipoCultivoController extends Controller
         if($tipoCultivo){
             return redirect()->route('tipoCultivo.index')->with('message' , 'Tipo de Cultivo Registrado');
         }else{
-            return redirect()->route('tipoCultivo.index')->with('message' , '¡Error!');
+            return redirect()->route('tipoCultivo.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -63,7 +63,7 @@ class TipoCultivoController extends Controller
         if($tipoCultivo){
             return redirect()->route('tipoCultivo.index')->with('message' , 'Tipo de Cultivo Editado');
         }else{
-            return redirect()->route('tipoCultivo.index')->with('message' , '¡Error!');
+            return redirect()->route('tipoCultivo.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -73,7 +73,7 @@ class TipoCultivoController extends Controller
         if($tipoCultivo->delete()){
             return redirect()->route('tipoCultivo.index')->with('message' , 'Tipo de Cultivo Eliminado');
         }else{
-            return redirect()->route('tipoCultivo.index')->with('message' , '¡Error!');
+            return redirect()->route('tipoCultivo.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 }

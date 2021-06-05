@@ -9,8 +9,6 @@ class Machine extends Model
 {
     use HasFactory;
 
-    public $primaryKey = 'nombre';
-
     protected $fillable = [
             'user_id',
             'nombre',

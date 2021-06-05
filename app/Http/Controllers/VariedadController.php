@@ -38,7 +38,7 @@ class VariedadController extends Controller
         if($variedad){
             return redirect()->route('variedad.index')->with('message' , 'Variedad Registrada');
         }else{
-            return redirect()->route('variedad.index')->with('message' , '¡Error!');
+            return redirect()->route('variedad.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -67,7 +67,7 @@ class VariedadController extends Controller
         if($variedad){
             return redirect()->route('variedad.index')->with('message' , 'Variedad Editada');
         }else{
-            return redirect()->route('variedad.index')->with('message' , '¡Error!');
+            return redirect()->route('variedad.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -76,7 +76,7 @@ class VariedadController extends Controller
         if($variedad->delete()){
             return redirect()->route('variedad.index')->with('message' , 'Variedad Eliminada');
         }else{
-            return redirect()->route('variedad.index')->with('message' , '¡Error!');
+            return redirect()->route('variedad.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 }

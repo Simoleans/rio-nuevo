@@ -128,9 +128,6 @@
     import JetInput from '@/Jetstream/Input'
     import JetLabel from '@/Jetstream/Label'
     import Select2 from 'vue3-select2-component';
-    import SelectInput from '@/components/SelectInput'
-
-    
 
     export default {
         components: {
@@ -139,7 +136,6 @@
             JetInput,
             JetLabel,
             Select2,
-            SelectInput
         },
         props: {
             errors: Object,

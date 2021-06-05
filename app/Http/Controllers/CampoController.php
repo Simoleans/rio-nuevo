@@ -49,7 +49,7 @@ class CampoController extends Controller
         if($campo){
             return redirect()->route('campo.index')->with('message' , 'Tipo de Cultivo Registrado');
         }else{
-            return redirect()->route('campo.index')->with('message' , '¡Error!');
+            return redirect()->route('campo.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -95,7 +95,7 @@ class CampoController extends Controller
         if($campo){
             return redirect()->route('campo.index')->with('message' , 'Campo Editado');
         }else{
-            return redirect()->route('campo.index')->with('message' , '¡Error!');
+            return redirect()->route('campo.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -110,7 +110,7 @@ class CampoController extends Controller
         if($campo->delete()){
             return redirect()->route('campo.index')->with('message' , 'Campo Eliminado');
         }else{
-            return redirect()->route('campo.index')->with('message' , '¡Error!');
+            return redirect()->route('campo.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 }

@@ -55,7 +55,7 @@ class ProductorController extends Controller
         if($productor){
             return redirect()->route('productors.index')->with('message' , 'Productor Registrado');
         }else{
-            return redirect()->route('productors.index')->with('message' , '¡Error!');
+            return redirect()->route('productors.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -109,7 +109,7 @@ class ProductorController extends Controller
         if($productor){
             return redirect()->route('productors.index')->with('message' , 'Productor Editado');
         }else{
-            return redirect()->route('productors.index')->with('message' , '¡Error!');
+            return redirect()->route('productors.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -124,7 +124,7 @@ class ProductorController extends Controller
         if($productor->delete()){
             return redirect()->route('productors.index')->with('message' , 'Productor Eliminado');
         }else{
-            return redirect()->route('productors.index')->with('message' , '¡Error!');
+            return redirect()->route('productors.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 }

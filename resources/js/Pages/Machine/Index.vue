@@ -126,6 +126,9 @@
         props : {
             machines : Object,
         },
+        created(){
+            console.log(this.machines)
+        },
         data() 
         {
             return {

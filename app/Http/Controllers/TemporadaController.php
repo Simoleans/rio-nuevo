@@ -37,7 +37,7 @@ class TemporadaController extends Controller
         if($temporada){
             return redirect()->route('temporada.index')->with('message' , 'Temporada Registrada');
         }else{
-            return redirect()->route('temporada.index')->with('message' , '¡Error!');
+            return redirect()->route('temporada.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -80,7 +80,7 @@ class TemporadaController extends Controller
         if($temporada){
             return redirect()->route('temporada.index')->with('message' , 'Temporada Editada');
         }else{
-            return redirect()->route('temporada.index')->with('message' , '¡Error!');
+            return redirect()->route('temporada.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -95,7 +95,7 @@ class TemporadaController extends Controller
         if($temporada->delete()){
             return redirect()->route('temporada.index')->with('message' , 'Temporada Eliminada');
         }else{
-            return redirect()->route('temporada.index')->with('message' , '¡Error!');
+            return redirect()->route('temporada.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 }

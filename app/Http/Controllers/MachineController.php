@@ -43,7 +43,7 @@ class MachineController extends Controller
         if($machine){
             return redirect()->route('machine.index', $machine->id)->with('message' , 'Maquina Creada');
         }else{
-            return redirect()->route('machine.index', $machine->id)->with('message' , '¡Error!');
+            return redirect()->route('machine.index', $machine->id)->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -56,7 +56,6 @@ class MachineController extends Controller
     
     public function edit(Machine $machine)
     {
-        dd("kshskh");
         return Inertia::render('Machine/Edit',[
             'machine' => $machine
         ]);
@@ -78,7 +77,7 @@ class MachineController extends Controller
         if($machine){
             return redirect()->route('machine.index')->with('message' , 'Maquina Editada');
         }else{
-            return redirect()->route('machine.index')->with('message' , '¡Error!');
+            return redirect()->route('machine.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -87,7 +86,7 @@ class MachineController extends Controller
         if($machine->delete()){
             return redirect()->route('machine.index')->with('message' , 'Maquina Eliminada');
         }else{
-            return redirect()->route('machine.index')->with('message' , '¡Error!');
+            return redirect()->route('machine.index')->with('class', 'bg-red-500')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 }

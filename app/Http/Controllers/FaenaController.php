@@ -61,7 +61,7 @@ class FaenaController extends Controller
         if($faena){
             return redirect()->route('faena.index')->with('message' , 'Faena Registrada');
         }else{
-            return redirect()->route('faena.index')->with('message' , '¡Error!');
+            return redirect()->route('faena.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -116,7 +116,7 @@ class FaenaController extends Controller
         if($faena){
             return redirect()->route('faena.index')->with('message' , 'Faena Editada');
         }else{
-            return redirect()->route('faena.index')->with('message' , '¡Error!');
+            return redirect()->route('faena.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -131,7 +131,7 @@ class FaenaController extends Controller
         if($faena->delete()){
             return redirect()->route('faena.index')->with('message' , 'Faena Eliminada');
         }else{
-            return redirect()->route('faena.index')->with('message' , '¡Error!');
+            return redirect()->route('faena.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -142,7 +142,7 @@ class FaenaController extends Controller
         if($faena->update()){
             return redirect()->route('faena.index')->with('message' , 'Faena Finalizada');
         }else{
-            return redirect()->route('faena.index')->with('message' , '¡Error!');
+            return redirect()->route('faena.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 }

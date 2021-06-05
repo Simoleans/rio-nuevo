@@ -57,7 +57,10 @@ class ReporteController extends Controller
     {
         $validateUsersReport = Reporte::where('user_id',auth()->user()->id)->whereDate('created_at', Carbon::today())->count();
 
-        dd($validateUsersReport);
+        if($validateUsersReport >= 2){
+            return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Solo puedes hacer 2 reportes diarios!');
+        }
+        
         $request->validate([
             'productor' => 'required',
             'campo' => 'required',
@@ -82,7 +85,7 @@ class ReporteController extends Controller
         if($reporte){
             return redirect()->route('reporte.index')->with('message' , '¡Reporte Creado Exitosamente!');
         }else{
-            return redirect()->route('reporte.index')->with('message' , '¡Error!');
+            return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -145,7 +148,7 @@ class ReporteController extends Controller
         if($reporte->update()){
             return redirect()->route('reporte.index')->with('message' , 'Reporte Anulado');
         }else{
-            return redirect()->route('reporte.index')->with('message' , '¡Error!');
+            return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -156,7 +159,7 @@ class ReporteController extends Controller
         if($reporte->update()){
             return redirect()->route('reporte.index')->with('message' , 'Reporte Habilitado');
         }else{
-            return redirect()->route('reporte.index')->with('message' , '¡Error!');
+            return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -166,7 +169,7 @@ class ReporteController extends Controller
         $validateUsersReport = Reporte::where('user_id',auth()->user()->id)->whereDate('created_at', Carbon::today())->count();
 
         if($validateUsersReport >= 2){
-            dd("validacion de mas de 2 reportes");
+            return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Solo puedes hacer 2 reportes diarios!');
         }
 
         $request->merge(['user_id' => auth()->user()->id]);
@@ -176,7 +179,7 @@ class ReporteController extends Controller
         if($reporte){
             return redirect()->route('reporte.index')->with('message' , '¡Reporte Clonado Exitosamente!');
         }else{
-            return redirect()->route('reporte.index')->with('message' , '¡Error!');
+            return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 }

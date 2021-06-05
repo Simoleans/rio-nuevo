@@ -23,7 +23,7 @@
                                 <jet-input-error :message="errors.nombre" class="mt-2" />
 
                                 <jet-label for="tipo_cultivo" value="T. Cultivo (*)" />
-                                <select-input :database="tipo_cultivos" :errors="errors.tipo_cultivo" v-model="form.tipo_cultivo"/>
+                                <Select2 required v-model="form.tipo_cultivo" :options="optTipoC" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
                                 <jet-input-error :message="errors.tipo_cultivo" class="mt-2" />
 
                                 <div class="flex justify-end gap-2 mt-2 items-center">
@@ -50,8 +50,7 @@
     import JetInputError from '@/Jetstream/InputError'
     import JetInput from '@/Jetstream/Input'
     import JetLabel from '@/Jetstream/Label'
-    import SelectInput from '@/components/SelectInput'
-    
+    import Select2 from 'vue3-select2-component';    
     
 
     export default {
@@ -60,24 +59,36 @@
             JetInputError,
             JetInput,
             JetLabel,
-            SelectInput
+            Select2
         },
         props: {
             errors: Object,
             tipo_cultivos : Object
         },
-        setup() {
+        setup(props) {
                 const form =  reactive({
                     nombre: null,
                     tipo_cultivo : null,
+                });
+
+                const optTipoC = [];
+
+                props.tipo_cultivos.forEach( function(element) {
+                    optTipoC.push({'id' : element.nombre,'text' : element.nombre})
                 });
 
                 const storeData = () => {
                     Inertia.post('/variedad', {...form})
                 }
 
-                return {form,storeData}
+                return {form,storeData,optTipoC}
         }
     }
 
 </script>
+<style>
+    .select2-container .select2-selection--single {
+        height: 38px !important;
+        padding-top: 3px;
+    }
+</style>

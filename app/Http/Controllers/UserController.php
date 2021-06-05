@@ -48,7 +48,7 @@ class UserController extends Controller
         if($user){
             return redirect()->route('usuario.index')->with('message' , 'Usuario Creado');
         }else{
-            return redirect()->route('usuario.index')->with('message' , '¡Error!');
+            return redirect()->route('usuario.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
     /**
@@ -82,7 +82,7 @@ class UserController extends Controller
         if($usuario){
             return redirect()->route('usuario.index')->with('message' , 'Usuario Editado');
         }else{
-            return redirect()->route('usuario.index')->with('message' , '¡Error!');
+            return redirect()->route('usuario.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 
@@ -92,7 +92,7 @@ class UserController extends Controller
         if($usuario->update(['status' => 0])){
             return redirect()->route('usuario.index')->with('message' , 'Usuario Eliminado');
         }else{
-            return redirect()->route('usuario.index')->with('message' , '¡Error!');
+            return redirect()->route('usuario.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
     }
 }
