@@ -119,6 +119,9 @@
             </template>
 
             <template #footer>
+                <jet-button v-show="modal.status == 0" class="bg-green-400 hover:bg-green-500 mr-2" @click="cloneReport({...modal})">
+                    Clonar Reporte
+                </jet-button>
                 <jet-button v-show="modal.status == 0" :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishreporte(modal.id)">
                     Activar Reporte
                 </jet-button>
@@ -200,6 +203,9 @@
                 this.showModalData = false;
                 this.processing = false;
             },
+            cloneReport(data){
+                console.log(data)
+            }
         },
         watch : {
             search : function (value) {
