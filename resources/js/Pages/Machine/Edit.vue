@@ -31,7 +31,7 @@
                                 <jet-input-error :message="errors.modelo" class="mt-2" />
 
                                 <jet-label for="tipo" value="Tipo (*)" />
-                                <select-input :errors="errors.tipo" :model="form.tipo" :options="options" />
+                                <Select2 required v-model="form.tipo" :options="options" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
                                 <jet-input-error :message="errors.tipo" class="mt-2" />
 
                                 <jet-label for="year" value="Año (*)" />
@@ -67,7 +67,7 @@
     import JetInputError from '@/Jetstream/InputError'
     import JetInput from '@/Jetstream/Input'
     import JetLabel from '@/Jetstream/Label'
-    import SelectInput from '@/components/SelectInput'
+    import Select2 from 'vue3-select2-component';
     
 
     export default {
@@ -76,7 +76,7 @@
             JetInputError,
             JetInput,
             JetLabel,
-            SelectInput
+            Select2
         },
         props: {
             errors: Object,
@@ -93,8 +93,8 @@
                 });
 
                 const options = [
-                        { text: 'Normal', value: 'normal'},
-                        { text: 'Arriendo', value: 'arriendo'}
+                        { text: 'Normal', id: 'normal'},
+                        { text: 'Arriendo', id: 'arriendo'}
                     ];
 
                 const updateData = () => {
@@ -106,3 +106,9 @@
     }
 
 </script>
+<style>
+    .select2-container .select2-selection--single {
+        height: 38px !important;
+        padding-top: 3px;
+    }
+</style>
