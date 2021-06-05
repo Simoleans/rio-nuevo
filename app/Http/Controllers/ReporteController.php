@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Inertia\Inertia;
 use App\Models\Campo;
 use App\Models\Machine;
@@ -10,8 +11,8 @@ use App\Models\Variedad;
 use App\Models\Productor;
 use App\Models\TipoCultivo;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ReporteExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReporteController extends Controller
 {
@@ -54,6 +55,9 @@ class ReporteController extends Controller
      */
     public function store(Request $request)
     {
+        $validateUsersReport = Reporte::where('user_id',auth()->user()->id)->whereDate('created_at', Carbon::today())->count();
+
+        dd($validateUsersReport);
         $request->validate([
             'productor' => 'required',
             'campo' => 'required',
@@ -158,6 +162,12 @@ class ReporteController extends Controller
 
     public function clone(Request $request)
     {
+
+        $validateUsersReport = Reporte::where('user_id',auth()->user()->id)->whereDate('created_at', Carbon::today())->count();
+
+        if($validateUsersReport >= 2){
+            dd("validacion de mas de 2 reportes");
+        }
 
         $request->merge(['user_id' => auth()->user()->id]);
 
