@@ -119,7 +119,10 @@
             </template>
 
             <template #footer>
-                <jet-danger-button :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishreporte(modal.id)">
+                <jet-button v-show="modal.status == 0" :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishreporte(modal.id)">
+                    Activar Reporte
+                </jet-button>
+                <jet-danger-button  v-show="modal.status == 1"  :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishreporte(modal.id)">
                     Anular Reporte
                 </jet-danger-button>
                 <jet-secondary-button class="ml-2" @click="closeModalShow">
@@ -135,6 +138,7 @@
     import Pagination from '@/Components/Pagination'
     import JetDialogModal from '@/Jetstream/DialogModal'
     import JetDangerButton from '@/Jetstream/DangerButton'
+    import JetButton from '@/Jetstream/Button'
     import JetSecondaryButton from '@/Jetstream/SecondaryButton'
     import { Inertia } from '@inertiajs/inertia'
 
@@ -144,7 +148,8 @@
             Pagination,
             JetDialogModal,
             JetDangerButton,
-            JetSecondaryButton
+            JetSecondaryButton,
+            JetButton
         },
         props : {
             reportes : Object,
@@ -166,7 +171,6 @@
 
                 this.confirmDelete = true;
 
-                setTimeout(() => this.processing = false, 1100)
             },
             closeModal() {
 
@@ -184,7 +188,7 @@
             showData(reporte){
                 this.showModalData = true;
                 this.modal = {...reporte};
-                setTimeout(() => this.processing = false, 850)
+                setTimeout(() => this.processing = false, 1050)
             },
             finishreporte(id){
                 Inertia.put(route('disabledReporte',id),{
@@ -193,8 +197,8 @@
             },
             closeModalShow() {
                 this.id = null;
-                this.showModalData = true;
-                this.processing = true;
+                this.showModalData = false;
+                this.processing = false;
             },
         },
         watch : {
