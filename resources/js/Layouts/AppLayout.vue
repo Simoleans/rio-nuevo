@@ -25,13 +25,13 @@
                                 <jet-nav-link :href="route('reporte.index')" :active="route().current('reporte.*')">
                                     Reportes
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('faena.index')" :active="route().current('faena.*')">
+                                <jet-nav-link v-if="$page.props.user.admin" :href="route('faena.index')" :active="route().current('faena.*')">
                                     Faena
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('usuario.index')" :active="route().current('usuario.*')">
+                                <jet-nav-link v-if="$page.props.user.admin" :href="route('usuario.index')" :active="route().current('usuario.*')">
                                     Usuarios
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('temporada.index')" :active="route().current('temporada.*')">
+                                <jet-nav-link v-if="$page.props.user.admin" :href="route('temporada.index')" :active="route().current('temporada.*')">
                                     Temporadas
                                 </jet-nav-link>
                             </div>
@@ -131,23 +131,23 @@
                                         <div class="block px-4 py-2 text-xs text-gray-400">
                                             Datos
                                         </div>
-                                        <jet-dropdown-link :href="route('machine.index')">
+                                        <jet-dropdown-link v-if="$page.props.user.admin" :href="route('machine.index')">
                                             Maquinas
                                         </jet-dropdown-link>
 
-                                        <jet-dropdown-link :href="route('productors.index')">
+                                        <jet-dropdown-link v-if="$page.props.user.admin" :href="route('productors.index')">
                                             Productores
                                         </jet-dropdown-link>
 
-                                        <jet-dropdown-link :href="route('tipoCultivo.index')">
+                                        <jet-dropdown-link v-if="$page.props.user.admin" :href="route('tipoCultivo.index')">
                                             T. Cultivo
                                         </jet-dropdown-link>
 
-                                        <jet-dropdown-link :href="route('campo.index')">
+                                        <jet-dropdown-link v-if="$page.props.user.admin" :href="route('campo.index')">
                                             Campo
                                         </jet-dropdown-link>
 
-                                        <jet-dropdown-link :href="route('variedad.index')">
+                                        <jet-dropdown-link v-if="$page.props.user.admin" :href="route('variedad.index')">
                                             Variedad
                                         </jet-dropdown-link>
 
@@ -185,13 +185,13 @@
                         <jet-responsive-nav-link :href="route('reporte.index')" :active="route().current('reporte.*')">
                             Reportes
                         </jet-responsive-nav-link>
-                        <jet-responsive-nav-link :href="route('faena.index')" :active="route().current('faena.*')">
+                        <jet-responsive-nav-link v-if="$page.props.user.admin" :href="route('faena.index')" :active="route().current('faena.*')">
                             Faena
                         </jet-responsive-nav-link>
-                        <jet-responsive-nav-link :href="route('usuario.index')" :active="route().current('usuario.*')">
+                        <jet-responsive-nav-link v-if="$page.props.user.admin" :href="route('usuario.index')" :active="route().current('usuario.*')">
                             Usuarios
                         </jet-responsive-nav-link>
-                        <jet-responsive-nav-link :href="route('temporada.index')" :active="route().current('temporada.*')">
+                        <jet-responsive-nav-link v-if="$page.props.user.admin" :href="route('temporada.index')" :active="route().current('temporada.*')">
                             Temporadas
                         </jet-responsive-nav-link>
                     </div>
@@ -221,23 +221,23 @@
                             <div class="block px-4 py-2 text-xs text-white">
                                 Datos
                             </div>
-                            <jet-responsive-nav-link :href="route('machine.index')">
+                            <jet-responsive-nav-link v-if="$page.props.user.admin" :href="route('machine.index')">
                                 Maquinas
                             </jet-responsive-nav-link>
 
-                            <jet-responsive-nav-link :href="route('productors.index')">
+                            <jet-responsive-nav-link v-if="$page.props.user.admin" :href="route('productors.index')">
                                 Productores
                             </jet-responsive-nav-link>
 
-                            <jet-responsive-nav-link :href="route('tipoCultivo.index')">
+                            <jet-responsive-nav-link v-if="$page.props.user.admin" :href="route('tipoCultivo.index')">
                                 T. Cultivo
                             </jet-responsive-nav-link>
 
-                            <jet-responsive-nav-link :href="route('campo.index')">
+                            <jet-responsive-nav-link v-if="$page.props.user.admin" :href="route('campo.index')">
                                 Campo
                             </jet-responsive-nav-link>
 
-                            <jet-responsive-nav-link :href="route('variedad.index')">
+                            <jet-responsive-nav-link v-if="$page.props.user.admin" :href="route('variedad.index')">
                                 Variedad
                             </jet-responsive-nav-link>
 

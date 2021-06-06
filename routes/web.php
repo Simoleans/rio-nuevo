@@ -34,6 +34,15 @@ Route::get('/', function () {
 })->name('loginView');
 
 Route::middleware(['auth:sanctum','user-inactive'])->group(function () {
+    Route::resource('/reporte',ReporteController::class);
+    Route::get('/reporte/excel/export',[ReporteController::class,'excelExport'])->name('excelExport');
+    Route::put('/finalizarReporte/{reporte}',[ReporteController::class,'disabledReporte'])->name('disabledReporte');
+    Route::put('/reporte/enable/{reporte}',[ReporteController::class,'enableReporte'])->name('reporte.enable');
+    route::get('clone/reporte/{reporte}',[ReporteController::class,'cloneView'])->name('cloneView');
+    Route::post('/reporte/clone',[ReporteController::class,'clone'])->name('reporte.clone');
+});
+
+Route::middleware(['auth:sanctum','user-inactive','admin'])->group(function () {
     Route::resource('/machine',MachineController::class);
     Route::put('/machine/enable/{machine}',[MachineController::class,'enable'])->name('machine.enable');
     Route::resource('/productors',ProductorController::class);
@@ -44,14 +53,7 @@ Route::middleware(['auth:sanctum','user-inactive'])->group(function () {
     Route::resource('/faena',FaenaController::class);
     Route::put('/finalizarFaena/{faena}',[FaenaController::class,'disabledFaena'])->name('disabledFaena');
     Route::resource('/temporada',TemporadaController::class);
-    Route::resource('/reporte',ReporteController::class);
-    Route::get('/reporte/excel/export',[ReporteController::class,'excelExport'])->name('excelExport');
-    Route::put('/finalizarReporte/{reporte}',[ReporteController::class,'disabledReporte'])->name('disabledReporte');
-    Route::put('/reporte/enable/{reporte}',[ReporteController::class,'enableReporte'])->name('reporte.enable');
-    route::get('clone/reporte/{reporte}',[ReporteController::class,'cloneView'])->name('cloneView');
-    Route::post('/reporte/clone',[ReporteController::class,'clone'])->name('reporte.clone');
 });
-
 
 Route::middleware(['auth:sanctum', 'verified','user-inactive'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');

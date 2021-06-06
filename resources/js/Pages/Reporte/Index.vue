@@ -129,7 +129,7 @@
                 <jet-button v-show="modal.status == 0" :class="{ 'opacity-25': processing }" :disabled="processing" @click="enableReporte(modal.id)">
                     Activar Reporte
                 </jet-button>
-                <jet-danger-button  v-show="modal.status == 1"  :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishreporte(modal.id)">
+                <jet-danger-button  v-show="modal.status == 1 && $page.props.user.admin"  :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishreporte(modal.id)">
                     Anular Reporte
                 </jet-danger-button>
                 <jet-secondary-button class="ml-2" @click="closeModalShow">

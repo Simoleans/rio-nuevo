@@ -42,7 +42,8 @@ class HandleInertiaRequests extends Middleware
                 'message' => $request->session()->get('message'),
                 'class' => $request->session()->get('class') ?? 'bg-green-400'
             ],
-            'user.report.diary' => env('REPORT_DIARY_USER')
+            'user.report.diary' => env('REPORT_DIARY_USER'),
+            'user.admin' => auth()->check() ? auth()->user()->isAdmin() : null
         ]);
     }
 }
