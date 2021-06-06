@@ -89,12 +89,12 @@
                                     </div>
                                     <div>
                                         <jet-label for="hs_maquina" value="Hs. Maquina (*)" />
-                                        <jet-input required id="hs_maquina" type="number" :errors="errors.hs_maquina" class="mt-1 block w-full" v-model="form.hs_maquina"/>
+                                        <jet-input id="hs_maquina" type="number" :errors="errors.hs_maquina" class="mt-1 block w-full" v-model="form.hs_maquina"/>
                                         <jet-input-error :message="errors.hs_maquina" class="mt-2" />
                                     </div>
                                     <div>
                                         <jet-label for="hectareas" value="Hectáreas (*)" />
-                                        <jet-input required id="hectareas" type="number" :errors="errors.hectareas" class="mt-1 block w-full" v-model="form.hectareas"/>
+                                        <jet-input id="hectareas" type="number" :errors="errors.hectareas" class="mt-1 block w-full" v-model="form.hectareas"/>
                                         <jet-input-error :message="errors.hectareas" class="mt-2" />
                                     </div>
                                 </div>

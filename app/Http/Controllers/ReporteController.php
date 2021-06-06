@@ -67,15 +67,12 @@ class ReporteController extends Controller
             'maquina' => 'required',
             'tipo_cultivo' => 'required',
             'variedad' => 'required',
-            'hs_maquina' => 'required',
             'cuartel' => 'required',
             'tipo_bandeja' => 'required',
             'nro_bandeja' => 'required',
             'kg_totales' => 'required',
             'kg_teoricos' => 'required',
             'petroleo' => 'required',
-            'hectareas' => 'required',
-            'observacion' => 'required',
     ]);
 
         $request->merge(['user_id' => auth()->user()->id]);
