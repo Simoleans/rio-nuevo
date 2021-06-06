@@ -24,7 +24,6 @@ class MachineController extends Controller
         return Inertia::render('Machine/Create');
     }
 
-
     public function store(Request $request)
     {
         $request->validate([
@@ -83,8 +82,21 @@ class MachineController extends Controller
 
     public function destroy(Machine $machine)
     {
-        if($machine->delete()){
-            return redirect()->route('machine.index')->with('message' , 'Maquina Eliminada');
+        $machine->status = 0;
+
+        if($machine->update()){
+            return redirect()->route('machine.index')->with('message' , 'Maquina Deshabilitada');
+        }else{
+            return redirect()->route('machine.index')->with('class', 'bg-red-500')->with('class', 'bg-red-500')->with('message' , '¡Error!');
+        }
+    }
+
+    public function enable(Machine $machine)
+    {
+        $machine->status = 1;
+
+        if($machine->update()){
+            return redirect()->route('machine.index')->with('message' , 'Maquina Habilitada');
         }else{
             return redirect()->route('machine.index')->with('class', 'bg-red-500')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }

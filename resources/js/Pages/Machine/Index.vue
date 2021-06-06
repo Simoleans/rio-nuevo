@@ -68,11 +68,14 @@
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Acción</span>
-                                            <inertia-link class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('machine.edit',machine.id)">
+                                            <inertia-link v-show="machine.status == 1" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('machine.edit',machine.id)">
                                                 Editar
                                             </inertia-link>
-                                            <a class="text-blue-400 hover:text-blue-600 underline m-2" href="#" @click="confirmDeleteData(machine.id)">
-                                                Eliminar
+                                            <a v-show="machine.status == 1" class="text-blue-400 hover:text-blue-600 underline m-2" href="#" @click="confirmDeleteData(machine.id)">
+                                                Deshabilitar
+                                            </a>
+                                            <a v-show="machine.status == 0" class="text-blue-400 hover:text-blue-600 underline m-2" href="#" @click="enabledMachine(machine.id)">
+                                                Habilitar
                                             </a>
                                         </td>
                                     </tr>
@@ -126,9 +129,6 @@
         props : {
             machines : Object,
         },
-        created(){
-            console.log(this.machines)
-        },
         data() 
         {
             return {
@@ -159,6 +159,10 @@
                     preserveScroll: true,
                     onSuccess: () => this.closeModal(),
                 })
+            },
+            enabledMachine(id){
+                    
+                Inertia.put(this.route('machine.enable',id));
             }
         },
         watch : {

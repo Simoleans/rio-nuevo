@@ -20,15 +20,14 @@ class Machine extends Model
             'status',
     ];
 
-    
-
     public function users()
     {
         return $this->hasOne(User::class,);
     }
 
-    // public function setUserIdAttribute($value)
-    // {
-    //     $this->attributes['user_id'] = auth()->user()->id;
-    // }
+    public function scopeActive($query){
+        
+        return $query->where('status',1);
+    }
+
 }

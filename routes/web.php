@@ -35,6 +35,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum','user-inactive'])->group(function () {
     Route::resource('/machine',MachineController::class);
+    Route::put('/machine/enable/{machine}',[MachineController::class,'enable'])->name('machine.enable');
     Route::resource('/productors',ProductorController::class);
     Route::resource('/tipoCultivo',TipoCultivoController::class);
     Route::resource('/campo',CampoController::class);
