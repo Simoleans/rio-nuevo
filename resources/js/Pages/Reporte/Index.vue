@@ -17,13 +17,15 @@
                     <div class="md:col-span-3 mt-5 md:mt-0">
                         <div class="shadow bg-white md:rounded-md p-4">
                             <div class="flex justify-between items-center gap-6">
-                                <input type="text" class="form-input rounded-md shadow-md p-2 m-1 flex-1" placeholder="Buscar..." v-model="search">
-                                <a v-if="reportes.data.length > 0" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('excelExport')">
-                                    Descargar
-                                </a>
-                                <inertia-link :href="route('reporte.create')" class="bg-blue-500 hover:bg-blue-700 p-3 rounded font-bold text-white">
-                                    Crear Reporte
-                                </inertia-link>
+                                <input type="text" class="form-input rounded-md shadow-md p-2 m-1" placeholder="Buscar..." v-model="search">
+                                <div class="flex flex-col md:flex-row lg:flex-row justify-between items-center gap-3">
+                                    <a v-if="reportes.data.length > 0" class="text-blue-400 hover:text-blue-600 underline" :href="route('excelExport')">
+                                        Descargar
+                                    </a>
+                                    <inertia-link :href="route('reporte.create')" class="bg-blue-500 hover:bg-blue-700 p-3 rounded font-bold text-white">
+                                        Crear Reporte
+                                    </inertia-link>
+                                </div>
                             </div>
                             <hr class="my-6">
                             <table class="border-collapse w-full">
@@ -119,6 +121,7 @@
             </template>
 
             <template #footer>
+            <div class="flex flex-col md:flex-row lg:flex-row justify-between gap-4">
                 <jet-button v-show="modal.status == 1" class="bg-green-400 hover:bg-green-500 mr-2" @click="cloneReport({...modal})">
                     Clonar Reporte
                 </jet-button>
@@ -131,6 +134,7 @@
                 <jet-secondary-button class="ml-2" @click="closeModalShow">
                     Cerrar
                 </jet-secondary-button>
+            </div>
             </template>
         </jet-dialog-modal>
     </app-layout>

@@ -41,7 +41,18 @@ class ReporteController extends Controller
         return Inertia::render('Reporte/Create',[
             'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
             'campo' => Campo::orderBy('id', 'desc')->get('nombre'),
-            'maquina' => Machine::orderBy('id', 'desc')->get('nombre'),
+            'maquina' => Machine::orderBy('id', 'desc')->active()->get('nombre'),
+            'variedad' => Variedad::orderBy('id', 'desc')->get('nombre'),
+            'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get('nombre'),
+        ]);
+    }
+
+    public function cloneView()
+    {
+        return Inertia::render('Reporte/Clone',[
+            'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
+            'campo' => Campo::orderBy('id', 'desc')->get('nombre'),
+            'maquina' => Machine::orderBy('id', 'desc')->active()->get('nombre'),
             'variedad' => Variedad::orderBy('id', 'desc')->get('nombre'),
             'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get('nombre'),
         ]);
