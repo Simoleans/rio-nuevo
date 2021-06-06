@@ -106,7 +106,7 @@
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
                                         Crear
                                     </button>
-                                    <inertia-link class="text-blue-400 hover:text-blue-600 underline" :href="route('machine.index')">
+                                    <inertia-link class="text-blue-400 hover:text-blue-600 underline" :href="route('reporte.index')">
                                         Volver
                                     </inertia-link>
                                 </div>

@@ -41,7 +41,8 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'message' => $request->session()->get('message'),
                 'class' => $request->session()->get('class') ?? 'bg-green-400'
-            ]
+            ],
+            'user.report.diary' => env('REPORT_DIARY_USER')
         ]);
     }
 }

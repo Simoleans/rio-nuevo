@@ -37,8 +37,9 @@ class ReporteExport implements FromView, ShouldAutoSize, WithEvents,WithDrawings
 
                 $c = count($this->query) + 6;
                 
-                $cellRange = 'A6:Q'.$c;
+                $cellRange = 'A6:V'.$c;
                 $cellRangeAll = 'A6:Q6'; // header table estacion
+                $cellRed = 'R6:V6';
 
                 $styleArrayAll = [ //encabezado
                     'font'      => [
@@ -59,6 +60,29 @@ class ReporteExport implements FromView, ShouldAutoSize, WithEvents,WithDrawings
                         'rotation'   => 90,
                         'startColor' => [
                             'argb' => 'FFE699',
+                        ],
+                    ],
+                ];
+
+                $styleArrayRed = [ //encabezado
+                    'font'      => [
+                        'bold' => true,
+                    ],
+                    'alignment' => [
+                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    ],
+
+                    'borders'   => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color'       => ['argb' => '000000'],
+                        ],
+                    ],
+                    'fill'      => [
+                        'fillType'   => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                        'rotation'   => 90,
+                        'startColor' => [
+                            'argb' => 'E72F15',
                         ],
                     ],
                 ];
@@ -95,6 +119,7 @@ class ReporteExport implements FromView, ShouldAutoSize, WithEvents,WithDrawings
                     ->setOddFooter('&L&B' . $event->sheet->getTitle() . '&Pagína &P of &N');
                 
                 $event->sheet->getDelegate()->getStyle($cellRangeAll)->applyFromArray($styleArrayAll)->getFont()->setSize(12);
+                $event->sheet->getDelegate()->getStyle($cellRed)->applyFromArray($styleArrayRed)->getFont()->setSize(12);
                 $event->sheet->getTabColor()->setRGB('FF0000');
                 $event->sheet->setTitle('Reportes');
 

@@ -48,6 +48,7 @@ Route::middleware(['auth:sanctum','user-inactive'])->group(function () {
     Route::get('/reporte/excel/export',[ReporteController::class,'excelExport'])->name('excelExport');
     Route::put('/finalizarReporte/{reporte}',[ReporteController::class,'disabledReporte'])->name('disabledReporte');
     Route::put('/reporte/enable/{reporte}',[ReporteController::class,'enableReporte'])->name('reporte.enable');
+    route::get('clone/reporte/{reporte}',[ReporteController::class,'cloneView'])->name('cloneView');
     Route::post('/reporte/clone',[ReporteController::class,'clone'])->name('reporte.clone');
 });
 

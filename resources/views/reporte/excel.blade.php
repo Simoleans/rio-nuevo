@@ -23,6 +23,11 @@
         <th>KILOS TEÓRICOS</th>
         <th>HORAS</th>
         <th>HORAS DELTA</th>
+        <th>FACTURA ARRIENDO</th>
+        <th>STATUS ARRIENDO</th>
+        <th>COMPLETO</th>
+        <th>N. FACTURA</th>
+        <th>STATUS FACTURA</th>
     </tr>
     </thead>
     <tbody>
@@ -34,17 +39,17 @@
             <td>{{ $r->created_at->format('d-m-Y').'-'.$r->maquina }}</td>
             <td>{{ strtoupper($r->maquina()->tipo) }}</td>
             <td>{{ $r->id }}</td>
-            <td>{{ strtoupper(auth()->user()->name) }}</td>
+            <td>{{ strtoupper($r->user->name) }}</td>
             <td>{{ strtoupper($r->productor) }}</td>
             <td>{{ strtoupper($r->campo) ?? '-' }}</td>
             <td>{{ strtoupper($r->variedad) ?? '-' }}</td>
-            <td>CONCATENADO LIQUIDACIONES</td>
+            <td>{{ strtoupper($r->concatenadoLiquidacion()) }}</td>
             <td>{{ $r->tipo_bandeja }}</td>
             <td>{{ $r->nro_bandeja }}</td>
             <td>{{ $r->kg_totales }}</td>
             <td>{{ $r->kg_teoricos }}</td>
-            <td>{{ $r->hs_maquina }}</td>
-            <td>Horas Delta</td>
+            <td>{{ $r->hs_maquina ?? 0 }}</td>
+            <td>{{ $r->horas_delta }}</td>
         </tr>
     @endforeach
     </tbody>

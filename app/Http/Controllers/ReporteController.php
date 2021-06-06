@@ -24,7 +24,7 @@ class ReporteController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Reporte/Index', [
-            'reportes' => Reporte::orderBy('id', 'desc')
+            'reportes' => Reporte::with(['user','userAnular'])->orderBy('id', 'desc')
             ->where('maquina', 'LIKE' , "%$request->search%")
             ->orWhere('productor', 'LIKE' , "%$request->search%")
             ->simplePaginate(6)
@@ -47,7 +47,7 @@ class ReporteController extends Controller
         ]);
     }
 
-    public function cloneView()
+    public function cloneView(Reporte $reporte)
     {
         return Inertia::render('Reporte/Clone',[
             'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
@@ -55,6 +55,7 @@ class ReporteController extends Controller
             'maquina' => Machine::orderBy('id', 'desc')->active()->get('nombre'),
             'variedad' => Variedad::orderBy('id', 'desc')->get('nombre'),
             'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get('nombre'),
+            'reporte' => $reporte
         ]);
     }
 
@@ -68,7 +69,7 @@ class ReporteController extends Controller
     {
         $validateUsersReport = Reporte::where('user_id',auth()->user()->id)->whereDate('created_at', Carbon::today())->count();
 
-        if($validateUsersReport >= 2){
+        if($validateUsersReport >= env('REPORT_DIARY_USER') && auth()->user()->isOperador()){
             return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Solo puedes hacer 2 reportes diarios!');
         }
         
@@ -84,9 +85,14 @@ class ReporteController extends Controller
             'kg_totales' => 'required',
             'kg_teoricos' => 'required',
             'petroleo' => 'required',
-    ]);
+        ]);
 
-        $request->merge(['user_id' => auth()->user()->id]);
+        $query = Reporte::latest()->first();
+
+        $hsAfter = $query->hs_maquina ?? 0;
+        
+
+        $request->merge(['user_id' => auth()->user()->id,'horas_delta' => $hsAfter + $request->hs_maquina]);
 
         $reporte = Reporte::create($request->all());
         
@@ -152,6 +158,7 @@ class ReporteController extends Controller
     public function disabledReporte(Reporte $reporte)
     {
         $reporte->status = 0;
+        $reporte->user_anular = auth()->user()->id;
 
         if($reporte->update()){
             return redirect()->route('reporte.index')->with('message' , 'Reporte Anulado');
@@ -176,7 +183,7 @@ class ReporteController extends Controller
 
         $validateUsersReport = Reporte::where('user_id',auth()->user()->id)->whereDate('created_at', Carbon::today())->count();
 
-        if($validateUsersReport >= 2){
+        if($validateUsersReport >= env('REPORT_DIARY_USER')){
             return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Solo puedes hacer 2 reportes diarios!');
         }
 

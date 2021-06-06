@@ -11,7 +11,7 @@
                 <div class="md:grid md:grid-cols-3 md:gap-6">
                     <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
-                            <h3 class="text-lg text-gray-900">Crear un Reporte</h3>
+                            <h3 class="text-lg text-gray-900">Clonar Reporte</h3>
                             <p class="text-sm text-gray-500">(*) Campos Requeridos</p>
                         </div>
                     </div>
@@ -104,9 +104,9 @@
                                 
                                 <div class="flex justify-end gap-2 mt-2 items-center">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
-                                        Crear
+                                        Clonar
                                     </button>
-                                    <inertia-link class="text-blue-400 hover:text-blue-600 underline" :href="route('machine.index')">
+                                    <inertia-link class="text-blue-400 hover:text-blue-600 underline" :href="route('reporte.index')">
                                         Volver
                                     </inertia-link>
                                 </div>
@@ -143,25 +143,11 @@
             campo : Object,
             maquina : Object,
             tipo_cultivo : Object,
-            variedad : Object
+            variedad : Object,
+            reporte : Object
         },
         setup(props) {
-                const form =  ref({
-                    cuartel: null,
-                    variedad: null,
-                    maquina: null,
-                    campo: null,
-                    productor : null,
-                    tipo_cultivo : null,
-                    tipo_bandeja : null,
-                    kg_totales : null,
-                    kg_teoricos : null,
-                    nro_bandeja : null,
-                    hectareas : null,
-                    petroleo : null,
-                    hs_maquina : null,
-                    observacion : null,
-                });
+                const form =  ref({...props.reporte});
 
                 const productorOpt = [];
                 const campoOpt = [];

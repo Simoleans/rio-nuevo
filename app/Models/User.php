@@ -76,8 +76,19 @@ class User extends Authenticatable
         return $this->rol == 'admin';
     }
 
+    public function isOperador(){
+
+        return $this->rol == 'operador';
+    }
+
     public function scopeActive($query){
+
         return $query->where('status',1);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function scopeInactive($query){

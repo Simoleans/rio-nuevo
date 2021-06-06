@@ -25,7 +25,9 @@ class Reporte extends Model
             'petroleo',
             'hectareas',
             'observacion',
-            'status'
+            'status',
+            'user_anular',
+            'horas_delta'
     ];
 
 
@@ -33,13 +35,23 @@ class Reporte extends Model
         return $query->where('status',1);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function userAnular()
+    {
+        return $this->belongsTo(User::class,'user_anular')->withDefault(['name' => 'N/T']);
+    }
+
     public function maquina(){
         return Machine::where('nombre',$this->maquina)->first();
     }
 
-    // public function horasDelta(){
+    public function concatenadoLiquidacion()
+    {
+        return  $this->productor.'-'.$this->maquina.'-'.$this->created_at->format('d-m-Y').'-'.$this->campo;
+    }
 
-    //     $afterReport = Reporte::orderBy('id', 'desc')->where('id','!=',$this->id)->first();
-    //     dd($afterReport);
-    // }
 }

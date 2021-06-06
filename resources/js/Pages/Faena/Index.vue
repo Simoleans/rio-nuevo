@@ -64,7 +64,7 @@
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Status</span>
-                                            <span :class="{'bg-green-400' : faena.status == 1,'bg-red-400' : faena.status == 0}" class="rounded py-1 px-3 text-xs font-bold" v-text="faena.status == 1 ? 'Activa' : 'Finalizada'"></span>
+                                            <span :class="{'bg-green-400' : faena.status == 1,'bg-red-400' : faena.status == 0}" class="rounded py-1 px-3 text-xs font-bold" v-text="faena.status == 1 ? 'En Proceso' : 'Finalizada'"></span>
                                         </td>
                                         <td v-if="faena.status == 1" class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Acción</span>
@@ -128,9 +128,9 @@
             </template>
 
             <template #footer>
-                    <jet-danger-button v-show="modal.status == 1" :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishFaena(modal.id,modal.fecha_inicio)">
-                        Finalizar Faena
-                    </jet-danger-button>
+                <jet-danger-button v-show="modal.status == 1" :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishFaena(modal.id,modal.fecha_inicio)">
+                    Finalizar Faena
+                </jet-danger-button>
                 
                 <jet-secondary-button class="ml-2" @click="closeModalShow">
                     Cerrar

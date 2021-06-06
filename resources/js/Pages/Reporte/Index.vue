@@ -1,5 +1,5 @@
 <template>
-    <app-layout>
+    <app-layout>    
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Módulo de Reportes
@@ -93,7 +93,7 @@
         <!-- Show Account Modal -->
         <jet-dialog-modal :show="showModalData" @close="closeModalShow">
             <template #title>
-                <strong>{{ modal.productor }} - {{ modal.maquina }}</strong>
+                <strong>{{ modal.productor }} - {{ modal.maquina }} | <span v-show="modal.status == 0"> Anulado por : {{ modal.user_anular.name }}</span></strong>
             </template>
             
             <template #content>
@@ -112,6 +112,7 @@
                         <p>Kg Totales:</p><strong>{{ modal.kg_totales }}</strong>
                         <p>Kg Teóricos:</p><strong>{{ modal.kg_teoricos }}</strong>
                         <p>Hs. Maquina:</p><strong>{{ modal.hs_maquina }}</strong>
+                        <p>Creado por:</p><strong>{{ modal.user.name }}</strong>
                     </div>
                 </div>
                 <div class="border-t border-gray-300 mb-2"></div>
@@ -122,9 +123,9 @@
 
             <template #footer>
             <div class="flex flex-col md:flex-row lg:flex-row justify-between gap-4">
-                <jet-button v-show="modal.status == 1" class="bg-green-400 hover:bg-green-500 mr-2" @click="cloneReport({...modal})">
-                    Clonar Reporte
-                </jet-button>
+                <inertia-link v-show="modal.status == 1" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('cloneView',modal.id)">
+                    Clonar
+                </inertia-link>
                 <jet-button v-show="modal.status == 0" :class="{ 'opacity-25': processing }" :disabled="processing" @click="enableReporte(modal.id)">
                     Activar Reporte
                 </jet-button>
@@ -198,9 +199,11 @@
                 setTimeout(() => this.processing = false, 1050)
             },
             finishreporte(id){
-                Inertia.put(route('disabledReporte',id),{
-                    onSuccess : () => this.closeModalShow()
+                Inertia.put(route('disabledReporte',id),{},
+                    {onSuccess : () => this.closeModalShow()
                 });
+
+                
             },
             enableReporte(id){
                 Inertia.put(route('reporte.enable',id));
