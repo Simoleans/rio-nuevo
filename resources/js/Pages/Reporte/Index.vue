@@ -19,7 +19,7 @@
                             <div class="flex justify-between items-center gap-6">
                                 <input type="text" class="form-input rounded-md shadow-md p-2 m-1" placeholder="Buscar..." v-model="search">
                                 <div class="flex flex-col md:flex-row lg:flex-row justify-between items-center gap-3">
-                                    <a v-if="reportes.data.length > 0" class="text-blue-400 hover:text-blue-600 underline" :href="route('excelExport')">
+                                    <a v-if="reportes.data.length > 0 && $page.props.user.admin" class="text-blue-400 hover:text-blue-600 underline" :href="route('excelExport')">
                                         Descargar
                                     </a>
                                     <inertia-link :href="route('reporte.create')" class="bg-blue-500 hover:bg-blue-700 p-3 rounded font-bold text-white">
