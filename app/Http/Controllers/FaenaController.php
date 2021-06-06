@@ -50,7 +50,6 @@ class FaenaController extends Controller
             'campo' => 'required',
             'maquina' => 'required',
             'fecha_inicio' => 'required',
-            'fecha_final' => 'required',
             'temporada' => 'required'
         ]);
 
@@ -107,7 +106,6 @@ class FaenaController extends Controller
             'campo' => 'required',
             'maquina' => 'required',
             'fecha_inicio' => 'required',
-            'fecha_final' => 'required',
             'temporada' => 'required'
         ]);
 
@@ -135,9 +133,12 @@ class FaenaController extends Controller
         }
     }
 
-    public function disabledFaena(Faena $faena)
+    public function disabledFaena(Request $request,Faena $faena)
     {
+       
         $faena->status = 0;
+        $faena->fecha_final = $request->fecha_final;
+        $faena->user_finalizar = auth()->user()->id;
 
         if($faena->update()){
             return redirect()->route('faena.index')->with('message' , 'Faena Finalizada');

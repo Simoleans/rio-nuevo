@@ -66,7 +66,7 @@
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Status</span>
                                             <span :class="{'bg-green-400' : faena.status == 1,'bg-red-400' : faena.status == 0}" class="rounded py-1 px-3 text-xs font-bold" v-text="faena.status == 1 ? 'Activa' : 'Finalizada'"></span>
                                         </td>
-                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                                        <td v-if="faena.status == 1" class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Acción</span>
                                             <inertia-link class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('faena.edit',faena.id)">
                                                 Editar
@@ -74,6 +74,9 @@
                                             <a class="text-blue-400 hover:text-blue-600 underline m-2" href="#" @click="confirmDeleteData(faena.id)">
                                                 Eliminar
                                             </a>
+                                        </td>
+                                        <td v-else class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                                            -
                                         </td>
                                     </tr>
                                 </tbody>
@@ -115,14 +118,20 @@
                 <div class="flex flex-col gap-2">
                     <p>Campo:</p><strong>{{ modal.campo }}</strong>
                     <p>Fecha Inicio:</p><strong>{{ modal.fecha_inicio }}</strong>
-                    <p>Fecha Final:</p><strong>{{ modal.fecha_final }}</strong>
+                    <p v-show="modal.status == 0">Fecha Final:</p><strong v-show="modal.status == 0">{{ modal.fecha_final }}</strong>
                 </div>
+                    <div v-show="modal.status == 1">
+                        <jet-label for="fecha_final" value="Fecha Final (*)" />
+                        <jet-input id="fecha_final" type="date" :errors="errors.fecha_final" class="mt-1 block w-full" v-model="fecha_final"/>
+                        <jet-input-error :message="errors.fecha_final" class="mt-2" />
+                    </div>
             </template>
 
             <template #footer>
-                <jet-danger-button :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishFaena(modal.id)">
-                    Finalizar Faena
-                </jet-danger-button>
+                    <jet-danger-button v-show="modal.status == 1" :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishFaena(modal.id,modal.fecha_inicio)">
+                        Finalizar Faena
+                    </jet-danger-button>
+                
                 <jet-secondary-button class="ml-2" @click="closeModalShow">
                     Cerrar
                 </jet-secondary-button>
@@ -138,6 +147,9 @@
     import JetDangerButton from '@/Jetstream/DangerButton'
     import JetSecondaryButton from '@/Jetstream/SecondaryButton'
     import { Inertia } from '@inertiajs/inertia'
+    import JetInput from '@/Jetstream/Input'
+    import JetInputError from '@/Jetstream/InputError'
+    import JetLabel from '@/Jetstream/Label'
 
     export default {
         components: {
@@ -145,15 +157,20 @@
             Pagination,
             JetDialogModal,
             JetDangerButton,
-            JetSecondaryButton
+            JetSecondaryButton,
+            JetInput,
+            JetLabel,
+            JetInputError
         },
         props : {
             faenas : Object,
+            errors : Object
         },
         data() 
         {
             return {
                 search : '',
+                fecha_final : null,
                 confirmDelete : false,
                 processing : true,
                 id : null,
@@ -187,15 +204,25 @@
                 this.modal = {...faena};
                 setTimeout(() => this.processing = false, 850)
             },
-            finishFaena(id){
-                Inertia.put(route('disabledFaena',id),{
-                    onSuccess : () => this.closeModal()
-                });
+            finishFaena(id,fecha_inicio){
+                if (this.fecha_final == null) {
+                    this.errors.fecha_final = 'Debe seleccionar una fecha para finalizar.';
+                }else if(this.fecha_final < fecha_inicio){
+                    this.errors.fecha_final = 'La fecha ifnal no puede ser menor a la fecha de inicio.';
+                }else {
+                     Inertia.put(route('disabledFaena',id),
+                         {fecha_final : this.fecha_final},
+                        { onSuccess : () => {
+                             this.closeModalShow()
+                         }
+                     });
+                }
             },
             closeModalShow() {
                 this.id = null;
                 this.showModalData = false;
                 this.processing = true;
+                this.fecha_final = null;
             },
         },
         watch : {

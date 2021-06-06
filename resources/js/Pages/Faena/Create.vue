@@ -37,19 +37,19 @@
                                 <jet-label for="fecha_inicio" value="Fecha Inicio (*)" />
                                 <jet-input required id="fecha_inicio" type="date" :errors="errors.fecha_inicio" class="mt-1 block w-full" v-model="form.fecha_inicio"/>
                                 <jet-input-error :message="errors.fecha_inicio" class="mt-2" />
-                                <p v-show="errorDate" class="text-sm text-red-600">
+                                <!-- <p v-show="errorDate" class="text-sm text-red-600">
                                     La Fecha de Inicio no debe ser mayor a la fecha final.
-                                </p>
+                                </p> -->
 
-                                <jet-label for="fecha_final" value="Fecha Final (*)" />
+                                <!-- <jet-label for="fecha_final" value="Fecha Final (*)" />
                                 <jet-input required id="fecha_final" type="date" :errors="errors.fecha_final" class="mt-1 block w-full" v-model="form.fecha_final"/>
-                                <jet-input-error :message="errors.fecha_final" class="mt-2" />
+                                <jet-input-error :message="errors.fecha_final" class="mt-2" /> -->
 
                                 <div class="flex justify-end gap-2 mt-2 items-center">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
                                         Crear
                                     </button>
-                                    <inertia-link class="text-blue-400 hover:text-blue-600 underline" :href="route('machine.index')">
+                                    <inertia-link class="text-blue-400 hover:text-blue-600 underline" :href="route('faena.index')">
                                         Volver
                                     </inertia-link>
                                 </div>
@@ -91,7 +91,7 @@
         },
         setup(props) {
                 const form =  reactive({
-                    fecha_final: null,
+                    // fecha_final: null,
                     fecha_inicio: null,
                     maquina: null,
                     campo: null,
@@ -121,11 +121,13 @@
 
 
                 const storeData = () => {
-                    if (form.fecha_inicio > form.fecha_final) {
-                        props.errors.fecha_inicio = 'La fecha de inicio no debe ser mayor a la fecha final.';
-                    }else{
-                        Inertia.post('/faena', {...form})
-                    }
+                    // if (form.fecha_inicio > form.fecha_final) {
+                    //     props.errors.fecha_inicio = 'La fecha de inicio no debe ser mayor a la fecha final.';
+                    // }else{
+                    //     Inertia.post('/faena', {...form})
+                    // }
+
+                     Inertia.post('/faena', {...form})
                     
                 }
 

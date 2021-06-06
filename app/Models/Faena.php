@@ -15,6 +15,7 @@ class Faena extends Model
         'maquina',
         'fecha_inicio',
         'fecha_final',
+        'user_finalizar',
         'status',
         'user_id',
         'temporada'
