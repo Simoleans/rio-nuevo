@@ -27,7 +27,8 @@ class Reporte extends Model
             'observacion',
             'status',
             'user_anular',
-            'horas_delta'
+            'horas_delta',
+            'fecha'
     ];
 
 

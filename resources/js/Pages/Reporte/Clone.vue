@@ -33,7 +33,7 @@
                                 <jet-label for="variedad" value="Variedad (*)" />
                                 <Select2 required v-model="form.variedad" :options="variedadOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
                                 <jet-input-error :message="errors.variedad" class="mt-2" />
-                                <div class="grid grid-cols-2 gap-3">
+                                <div class="grid grid-cols-3 gap-3">
                                     <div>
                                         <jet-label for="tipo_bandeja" value="T. Bandeja (*)" />
                                         <select :class="{ ' border border-red-500' : errors.tipo_bandeja }" class="border-gray-300 w-full focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1" v-model="form.tipo_bandeja">
@@ -49,6 +49,11 @@
                                         <jet-label for="cuartel" value="Cuartel (*)" />
                                         <jet-input required id="cuartel" type="number" :errors="errors.cuartel" class="mt-1 block w-full" v-model="form.cuartel"/>
                                         <jet-input-error :message="errors.cuartel" class="mt-2" />
+                                    </div>
+                                    <div>
+                                        <jet-label for="fecha" value="Fecha (*)" />
+                                        <jet-input required id="fecha" type="date"  :errors="errors.fecha" class="mt-1 block w-full" v-model="form.fecha"/>
+                                        <jet-input-error :message="errors.fecha" class="mt-2" />
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-3 gap-3">
@@ -104,7 +109,7 @@
                                 
                                 <div class="flex justify-end gap-2 mt-2 items-center">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
-                                        Clonar
+                                        Crear
                                     </button>
                                     <inertia-link class="text-blue-400 hover:text-blue-600 underline" :href="route('reporte.index')">
                                         Volver
@@ -147,7 +152,23 @@
             reporte : Object
         },
         setup(props) {
-                const form =  ref({...props.reporte});
+                const form =  ref({
+                    cuartel: null,
+                    variedad: props.reporte.variedad,
+                    maquina: props.reporte.maquina,
+                    campo: props.reporte.campo,
+                    productor : props.reporte.productor,
+                    tipo_cultivo : props.reporte.tipo_cultivo,
+                    tipo_bandeja : props.reporte.tipo_bandeja,
+                    kg_totales : null,
+                    kg_teoricos : null,
+                    nro_bandeja : null,
+                    hectareas : null,
+                    petroleo : null,
+                    hs_maquina : null,
+                    observacion : null,
+                    fecha : new Date().toISOString().substr(0, 10)
+                });
 
                 const productorOpt = [];
                 const campoOpt = [];

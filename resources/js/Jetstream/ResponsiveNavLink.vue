@@ -17,7 +17,7 @@
         computed: {
             classes() {
                 return this.active
-                            ? 'block pl-3 pr-4 py-2 border-l-4 border-red-500 text-base font-bold text-black bg-white focus:outline-none focus:text-indigo-800 focus:bg-indigo-100 focus:border-red-500 transition'
+                            ? 'block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-bold text-black bg-white focus:outline-none focus:text-indigo-800 focus:bg-indigo-100 focus:border-red-500 transition'
                             : 'block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-white hover:font-bold hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition'
             }
         }

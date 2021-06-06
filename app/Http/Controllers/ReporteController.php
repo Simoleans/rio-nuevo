@@ -55,7 +55,7 @@ class ReporteController extends Controller
             'maquina' => Machine::orderBy('id', 'desc')->active()->get('nombre'),
             'variedad' => Variedad::orderBy('id', 'desc')->get('nombre'),
             'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get('nombre'),
-            'reporte' => $reporte
+            'reporte' => $reporte,
         ]);
     }
 
@@ -85,6 +85,7 @@ class ReporteController extends Controller
             'kg_totales' => 'required',
             'kg_teoricos' => 'required',
             'petroleo' => 'required',
+            'fecha' => 'required'
         ]);
 
         $query = Reporte::latest()->first();
@@ -92,7 +93,7 @@ class ReporteController extends Controller
         $hsAfter = $query->hs_maquina ?? 0;
         
 
-        $request->merge(['user_id' => auth()->user()->id,'horas_delta' => $hsAfter + $request->hs_maquina]);
+        $request->merge(['user_id' => auth()->user()->id,'horas_delta' => $hsAfter - $request->hs_maquina]);
 
         $reporte = Reporte::create($request->all());
         
