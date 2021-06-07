@@ -123,9 +123,9 @@
 
             <template #footer>
             <div class="flex flex-col md:flex-row lg:flex-row justify-between gap-4">
-                <inertia-link v-show="modal.status == 1" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('cloneView',modal.id)">
+                <a v-show="modal.status == 1" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.cloneView',modal.id)">
                     Clonar
-                </inertia-link>
+                </a>
                 <jet-button v-show="modal.status == 0" :class="{ 'opacity-25': processing }" :disabled="processing" @click="enableReporte(modal.id)">
                     Activar Reporte
                 </jet-button>
