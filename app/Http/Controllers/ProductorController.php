@@ -37,15 +37,7 @@ class ProductorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-                'rut' => 'required',
                 'razon_social' => 'required',
-                'localidad' => 'required',
-                'region' => 'required',
-                'comuna' => 'required',
-                'direccion' => 'required',
-                'nombre_responsable' => 'required',
-                'email' => 'required',
-                'telefono' => 'required',
         ]);
 
         $request->merge(['user_id' => auth()->user()->id]);
@@ -93,15 +85,7 @@ class ProductorController extends Controller
     public function update(Request $request, Productor $productor)
     {
         $request->validate([
-            'rut' => 'required',
             'razon_social' => 'required',
-            'localidad' => 'required',
-            'region' => 'required',
-            'comuna' => 'required',
-            'direccion' => 'required',
-            'nombre_responsable' => 'required',
-            'email' => 'required',
-            'telefono' => 'required',
         ]);
 
         $productor->update($request->all());

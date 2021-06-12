@@ -11,15 +11,7 @@ class Productor extends Model
 
     protected $fillable = [
             'user_id',
-            'rut',
             'razon_social',
-            'localidad',
-            'region',
-            'comuna',
-            'direccion',
-            'nombre_responsable',
-            'email',
-            'telefono',
             'status'
     ];
 }

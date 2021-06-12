@@ -27,36 +27,15 @@
                                 <thead>
                                     <tr>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">RUT - R. Social</th>
-                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Localidad</th>
-                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Region</th>
-                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Correo</th>
-                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Telefono</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(productor,i) in productors.data" :key="i" class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
-                                        <td @click="showData({...productor})" class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
+                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Nombre</span>
-                                            {{ productor.rut }} - {{ productor.razon_social }}
+                                            {{ productor.razon_social }}
                                         </td>
-                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Marca</span>
-                                            {{ productor.localidad }}
-                                        </td>
-                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Modelo</span>
-                                            {{ productor.region }}
-                                        </td>
-                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Año</span>
-                                            {{ productor.email }}
-                                        </td>
-                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Tipo</span>
-                                            {{ productor.telefono }}
-                                        </td>
-                                        
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Acción</span>
                                             <inertia-link class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('productors.edit',productor.id)">
@@ -96,7 +75,7 @@
             </template>
         </jet-dialog-modal>
         <!-- Show Account Modal -->
-        <jet-dialog-modal :show="showModalData" @close="closeModalShow">
+        <!-- <jet-dialog-modal :show="showModalData" @close="closeModalShow">
             <template #title>
                 <strong>{{ modal.razon_social }} - {{ modal.rut }}</strong>
             </template>
@@ -124,7 +103,7 @@
                     Cerrar
                 </jet-secondary-button>
             </template>
-        </jet-dialog-modal>
+        </jet-dialog-modal> -->
     </app-layout>
 </template>
 
