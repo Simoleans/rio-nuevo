@@ -11,7 +11,7 @@
                 <div class="md:grid md:grid-cols-3 md:gap-6">
                     <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
-                            <h3 class="text-lg text-gray-900">Crear un Tipo de Cultivo</h3>
+                            <h3 class="text-lg text-gray-900">Crear un Campo</h3>
                             <p class="text-sm text-gray-500">(*) Campos Requeridos</p>
                         </div>
                     </div>
@@ -22,6 +22,14 @@
                                 <jet-label for="nombre" value="Nombre (*)" />
                                 <jet-input id="nombre" type="text" :errors="errors.nombre" class="mt-1 block w-full" v-model="form.nombre"/>
                                 <jet-input-error :message="errors.nombre" class="mt-2" />
+
+                                <jet-label for="productor" value="Productor (*)" />
+                                <Select2 required v-model="form.productor" :options="productorOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                <jet-input-error :message="errors.productor" class="mt-2" />
+
+                                <jet-label for="localidad" value="Localidad (*)" />
+                                <jet-input id="localidad" type="text" :errors="errors.localidad" class="mt-1 block w-full" v-model="form.localidad"/>
+                                <jet-input-error :message="errors.localidad" class="mt-2" />
 
                                 <div class="flex justify-end gap-2 mt-2 items-center">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
@@ -47,7 +55,7 @@
     import JetInputError from '@/Jetstream/InputError'
     import JetInput from '@/Jetstream/Input'
     import JetLabel from '@/Jetstream/Label'
-    import SelectInput from '@/components/SelectInput'
+    import Select2 from 'vue3-select2-component';
     
 
     export default {
@@ -56,22 +64,36 @@
             JetInputError,
             JetInput,
             JetLabel,
-            SelectInput
+            Select2
         },
         props: {
-            errors: Object
+            errors: Object,
+            productor : Object
         },
-        setup() {
-                const form =  reactive({
-                    nombre: null,
-                });
+        setup(props) {
+            const form =  reactive({
+                nombre: null,
+                productor : null,
+                localidad : null
+            });
 
-                const storeData = () => {
-                    Inertia.post('/campo', {...form})
-                }
+            const productorOpt = [];
+            props.productor.forEach( function(element) {
+                productorOpt.push({'id' : element.razon_social,'text' : element.razon_social})
+            });
 
-                return {form,storeData}
+            const storeData = () => {
+                Inertia.post('/campo', {...form})
+            }
+
+            return {form,storeData,productorOpt}
         }
     }
 
 </script>
+<style>
+    .select2-container .select2-selection--single {
+        height: 38px !important;
+        padding-top: 3px;
+    }
+</style>

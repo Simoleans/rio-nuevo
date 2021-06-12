@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Campo;
+use App\Models\Productor;
 use Illuminate\Http\Request;
 
 class CampoController extends Controller
@@ -29,7 +30,9 @@ class CampoController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Campo/Create');
+        return Inertia::render('Campo/Create',[
+            'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
+        ]);
     }
 
     /**
@@ -42,6 +45,8 @@ class CampoController extends Controller
     {
         $request->validate([
             'nombre' => 'required',
+            'localidad' => 'required',
+            'productor' => 'required'
         ]);
 
         $campo = Campo::create($request->all());
@@ -73,7 +78,8 @@ class CampoController extends Controller
     public function edit(Campo $campo)
     {
         return Inertia::render('Campo/Edit',[
-            'campo' => $campo
+            'campo' => $campo,
+            'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
         ]);
     }
 
@@ -88,6 +94,8 @@ class CampoController extends Controller
     {
         $request->validate([
             'nombre' => 'required',
+            'localidad' => 'required',
+            'productor' => 'required'
         ]);
 
         $campo->update($request->all());

@@ -22,6 +22,14 @@
                                 <jet-input id="nombre" type="text" :errors="errors.nombre" class="mt-1 block w-full" v-model="form.nombre"/>
                                 <jet-input-error :message="errors.nombre" class="mt-2" />
 
+                                <jet-label for="productor" value="Productor (*)" />
+                                <Select2 required v-model="form.productor" :options="productorOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                <jet-input-error :message="errors.productor" class="mt-2" />
+
+                                <jet-label for="localidad" value="Localidad (*)" />
+                                <jet-input id="localidad" type="text" :errors="errors.localidad" class="mt-1 block w-full" v-model="form.localidad"/>
+                                <jet-input-error :message="errors.localidad" class="mt-2" />
+
                                 <div class="flex justify-end gap-2 mt-2 items-center">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
                                         Editar
@@ -47,7 +55,7 @@
     import JetInputError from '@/Jetstream/InputError'
     import JetInput from '@/Jetstream/Input'
     import JetLabel from '@/Jetstream/Label'
-    import SelectInput from '@/components/SelectInput'
+    import Select2 from 'vue3-select2-component';
     
 
     export default {
@@ -56,23 +64,38 @@
             JetInputError,
             JetInput,
             JetLabel,
-            SelectInput
+            Select2
         },
         props: {
             errors: Object,
-            campo : Object
+            campo : Object,
+            productor : Object
         },
         setup(props) {
                 const form =  reactive({
                     nombre: props.campo.nombre,
+                    localidad: props.campo.localidad,
+                    productor: props.campo.productor,
+                });
+
+                const productorOpt = [];
+
+                props.productor.forEach( function(element) {
+                    productorOpt.push({'id' : element.razon_social,'text' : element.razon_social})
                 });
 
                 const updateData = () => {
                     Inertia.put(route('campo.update',props.campo.id), {...form});
                 }
 
-                return {form,updateData}
+                return {form,updateData,productorOpt}
         }
     }
 
 </script>
+<style>
+    .select2-container .select2-selection--single {
+        height: 38px !important;
+        padding-top: 3px;
+    }
+</style>
