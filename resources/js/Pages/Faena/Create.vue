@@ -121,13 +121,7 @@
 
 
                 const storeData = () => {
-                    // if (form.fecha_inicio > form.fecha_final) {
-                    //     props.errors.fecha_inicio = 'La fecha de inicio no debe ser mayor a la fecha final.';
-                    // }else{
-                    //     Inertia.post('/faena', {...form})
-                    // }
-
-                     Inertia.post('/faena', {...form})
+                    Inertia.post('/faena', {...form})
                     
                 }
 

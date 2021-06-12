@@ -29,7 +29,6 @@ class TemporadaController extends Controller
             'nombre' => 'required',
             'pais' => 'required',
             'fecha_inicio' => 'required',
-            'fecha_fin' => 'required'
         ]);
         
         $temporada = Temporada::create($request->all());
@@ -72,7 +71,6 @@ class TemporadaController extends Controller
             'nombre' => 'required',
             'pais' => 'required',
             'fecha_inicio' => 'required',
-            'fecha_fin' => 'required'
         ]);
 
         $temporada->update($request->all());
@@ -94,6 +92,19 @@ class TemporadaController extends Controller
     {
         if($temporada->delete()){
             return redirect()->route('temporada.index')->with('message' , 'Temporada Eliminada');
+        }else{
+            return redirect()->route('temporada.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
+        }
+    }
+
+    public function finishTemporada(Request $request,Temporada $temporada)
+    {
+        $temporada->status = 0;
+        $temporada->fecha_fin = $request->fecha_fin;
+        $temporada->user_finalizar = auth()->user()->id;
+
+        if($temporada->update()){
+            return redirect()->route('temporada.index')->with('message' , 'Temporada Finalizada');
         }else{
             return redirect()->route('temporada.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }

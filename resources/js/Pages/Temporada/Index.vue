@@ -29,13 +29,13 @@
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Nombre</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">País</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Fecha Inicio</th>
-                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Fecha Final</th>
+                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Status</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(temporada,i) in temporadas.data" :key="i" class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
-                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
+                                        <td @click="showData({...temporada})" class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Nombre</span>
                                             {{ temporada.nombre }}
                                         </td>
@@ -47,13 +47,13 @@
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">F. Inicio</span>
                                             {{ temporada.fecha_inicio }}
                                         </td>
-                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">F. Final</span>
-                                            {{ temporada.fecha_fin }}
+                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Status</span>
+                                            <span :class="{'bg-green-400' : temporada.status == 1,'bg-red-400' : temporada.status == 0}" class="rounded py-1 px-3 text-xs font-bold" v-text="temporada.status == 1 ? 'En Proceso' : 'Finalizada'"></span>
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Acción</span>
-                                            <inertia-link class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('temporada.edit',temporada.id)">
+                                            <inertia-link v-show="temporada.status == 1" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('temporada.edit',temporada.id)">
                                                 Editar
                                             </inertia-link>
                                             <a class="text-blue-400 hover:text-blue-600 underline m-2" href="#" @click="confirmDeleteData(temporada.id)">
@@ -69,6 +69,35 @@
                 </div>
             </div>
         </div>
+        <!-- Show Account Modal -->
+        <jet-dialog-modal :show="showModalData" @close="closeModalShow">
+            <template #title>
+                <strong>{{ modal.nombre }}</strong>
+            </template>
+            
+            <template #content>
+                <div class="flex flex-col gap-2">
+                    <p>País:</p><strong>{{ modal.pais }}</strong>
+                    <p>Fecha Inicio:</p><strong>{{ modal.fecha_inicio }}</strong>
+                    <p v-show="modal.status == 0">Fecha Final:</p><strong v-show="modal.status == 0">{{ modal.fecha_fin }}</strong>
+                </div>
+                    <div v-show="modal.status == 1">
+                        <jet-label for="fecha_fin" value="Fecha Final (*)" />
+                        <jet-input id="fecha_fin" type="date" :errors="errors.fecha_fin" class="mt-1 block w-full" v-model="fecha_fin"/>
+                        <jet-input-error :message="errors.fecha_fin" class="mt-2" />
+                    </div>
+            </template>
+
+            <template #footer>
+                <jet-danger-button v-show="modal.status == 1" :class="{ 'opacity-25': processing }" :disabled="processing" @click="finishTemporada(modal.id,modal.fecha_inicio)">
+                    Finalizar Faena
+                </jet-danger-button>
+                
+                <jet-secondary-button class="ml-2" @click="closeModalShow">
+                    Cerrar
+                </jet-secondary-button>
+            </template>
+        </jet-dialog-modal>
         <!-- Delete Account Confirmation Modal -->
         <jet-dialog-modal :show="confirmDelete" @close="closeModal">
             <template #title>
@@ -99,6 +128,9 @@
     import JetDangerButton from '@/Jetstream/DangerButton'
     import JetSecondaryButton from '@/Jetstream/SecondaryButton'
     import { Inertia } from '@inertiajs/inertia'
+    import JetInput from '@/Jetstream/Input'
+    import JetInputError from '@/Jetstream/InputError'
+    import JetLabel from '@/Jetstream/Label'
 
     export default {
         components: {
@@ -106,18 +138,24 @@
             Pagination,
             JetDialogModal,
             JetDangerButton,
-            JetSecondaryButton
+            JetSecondaryButton,
+            JetInputError,
+            JetLabel,
+            JetInput
         },
         props : {
             temporadas : Object,
+            errors : Object
         },
         data() 
         {
             return {
                 search : '',
                 confirmDelete : false,
+                showModalData : false,
                 processing : true,
                 id : null,
+                fecha_fin : null,
             }
         },
         methods : {
@@ -134,8 +172,33 @@
 
                 this.processing = true;
             },
+            showData(temporada){
+                
+                this.showModalData = true;
+                this.modal = {...temporada};
+                setTimeout(() => this.processing = false, 850)
+            },
+            finishTemporada(id,fecha_inicio){
+                if (this.fecha_fin == null) {
+                    this.errors.fecha_fin = 'Debe seleccionar una fecha para finalizar.';
+                }else if(this.fecha_fin < fecha_inicio){
+                    this.errors.fecha_fin = 'La fecha ifnal no puede ser menor a la fecha de inicio.';
+                }else {
+                     Inertia.put(route('finishTemporada',id),
+                         {fecha_fin : this.fecha_fin},
+                        { onSuccess : () => {
+                             this.closeModalShow()
+                         }
+                     });
+                }
+            },
+            closeModalShow() {
+                this.id = null;
+                this.showModalData = false;
+                this.processing = true;
+                this.fecha_fin = null;
+            },
             deleteTipo(){
-
                 Inertia.delete(this.route('temporada.destroy' , this.id), {
                     preserveScroll: true,
                     onSuccess: () => {

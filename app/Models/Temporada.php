@@ -13,6 +13,7 @@ class Temporada extends Model
         'nombre',
         'pais',
         'fecha_fin',
-        'fecha_inicio'
+        'fecha_inicio',
+        'user_finalizar'
     ];
 }

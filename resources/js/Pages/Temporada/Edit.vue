@@ -30,10 +30,6 @@
                                 <jet-input id="fecha_inicio" type="date" :errors="errors.fecha_inicio" class="mt-1 block w-full" v-model="form.fecha_inicio"/>
                                 <jet-input-error :message="errors.fecha_inicio" class="mt-2" />
 
-                                <jet-label for="fecha_fin" value="F. Final (*)" />
-                                <jet-input id="fecha_fin" type="date" :errors="errors.fecha_fin" class="mt-1 block w-full" v-model="form.fecha_fin"/>
-                                <jet-input-error :message="errors.fecha_fin" class="mt-2" />
-
                                 <div class="flex justify-end gap-2 mt-2 items-center">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
                                         Editar
@@ -74,7 +70,6 @@
         setup(props) {
                 const form =  reactive({
                     nombre: props.temporada.nombre,
-                    fecha_fin : props.temporada.fecha_fin,
                     pais : props.temporada.pais,
                     fecha_inicio : props.temporada.fecha_inicio
                 });

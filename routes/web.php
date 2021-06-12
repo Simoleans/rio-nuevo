@@ -50,9 +50,10 @@ Route::middleware(['auth:sanctum','user-inactive','admin'])->group(function () {
     Route::resource('/campo',CampoController::class);
     Route::resource('/variedad',VariedadController::class);
     Route::resource('/usuario',UserController::class);
-    Route::resource('/faena',FaenaController::class);
-    Route::put('/finalizarFaena/{faena}',[FaenaController::class,'disabledFaena'])->name('disabledFaena');
+    // Route::resource('/faena',FaenaController::class);
+    // Route::put('/finalizarFaena/{faena}',[FaenaController::class,'disabledFaena'])->name('disabledFaena');
     Route::resource('/temporada',TemporadaController::class);
+    Route::put('/finishTemporada/{temporada}',[TemporadaController::class,'finishTemporada'])->name('finishTemporada');
 });
 
 Route::middleware(['auth:sanctum', 'verified','user-inactive'])->get('/dashboard', function () {
