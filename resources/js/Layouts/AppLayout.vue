@@ -25,9 +25,9 @@
                                 <jet-nav-link :href="route('reporte.index')" :active="route().current('reporte.*')">
                                     Reportes
                                 </jet-nav-link>
-                                <jet-nav-link v-if="$page.props.user.admin" :href="route('faena.index')" :active="route().current('faena.*')">
+                                <!-- <jet-nav-link v-if="$page.props.user.admin" :href="route('faena.index')" :active="route().current('faena.*')">
                                     Faena
-                                </jet-nav-link>
+                                </jet-nav-link> -->
                                 <jet-nav-link v-if="$page.props.user.admin" :href="route('usuario.index')" :active="route().current('usuario.*')">
                                     Usuarios
                                 </jet-nav-link>
@@ -185,9 +185,9 @@
                         <jet-responsive-nav-link :href="route('reporte.index')" :active="route().current('reporte.*')">
                             Reportes
                         </jet-responsive-nav-link>
-                        <jet-responsive-nav-link v-if="$page.props.user.admin" :href="route('faena.index')" :active="route().current('faena.*')">
+                        <!-- <jet-responsive-nav-link v-if="$page.props.user.admin" :href="route('faena.index')" :active="route().current('faena.*')">
                             Faena
-                        </jet-responsive-nav-link>
+                        </jet-responsive-nav-link> -->
                         <jet-responsive-nav-link v-if="$page.props.user.admin" :href="route('usuario.index')" :active="route().current('usuario.*')">
                             Usuarios
                         </jet-responsive-nav-link>
