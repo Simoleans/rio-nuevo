@@ -12,11 +12,7 @@ class Machine extends Model
     protected $fillable = [
             'user_id',
             'nombre',
-            'marca',
-            'modelo',
-            'tipo',
-            'year',
-            'serie',
+            'temporada',
             'status',
     ];
 

@@ -16,4 +16,8 @@ class Temporada extends Model
         'fecha_inicio',
         'user_finalizar'
     ];
+
+    public function scopeActive($query){
+        return $query->where('status',1);
+    }
 }

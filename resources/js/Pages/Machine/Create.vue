@@ -21,26 +21,10 @@
                                 <jet-label for="nombre" value="Nombre (*)" />
                                 <jet-input id="nombre" type="text" :errors="errors.nombre" class="mt-1 block w-full" v-model="form.nombre"/>
                                 <jet-input-error :message="errors.nombre" class="mt-2" />
-
-                                <jet-label for="marca" value="Marca (*)" />
-                                <jet-input id="marca" type="text" :errors="errors.marca" class="mt-1 block w-full" v-model="form.marca"/>
-                                <jet-input-error :message="errors.marca" class="mt-2" />
-
-                                <jet-label for="modelo" value="Modelo (*)" />
-                                <jet-input id="modelo" type="text" :errors="errors.modelo" class="mt-1 block w-full" v-model="form.modelo"/>
-                                <jet-input-error :message="errors.modelo" class="mt-2" />
-
-                                <jet-label for="tipo" value="Tipo (*)" />
-                                <Select2 required v-model="form.tipo" :options="options" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
-                                <jet-input-error :message="errors.tipo" class="mt-2" />
-
-                                <jet-label for="year" value="Año (*)" />
-                                <jet-input id="year" type="text" :errors="errors.year" class="mt-1 block w-full" v-model="form.year"/>
-                                <jet-input-error :message="errors.year" class="mt-2" />
-
-                                <jet-label for="serie" value="Serie (*)" />
-                                <jet-input id="serie" type="text" :errors="errors.serie" class="mt-1 block w-full" v-model="form.serie"/>
-                                <jet-input-error :message="errors.serie" class="mt-2" />
+                                
+                                <jet-label for="temporada" value="Temporadas (*)" />
+                                <Select2 required v-model="form.temporada" :options="temporadaOpc" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                <jet-input-error :message="errors.temporada" class="mt-2" />
 
                                 <div class="flex justify-end gap-2 mt-2 items-center">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
@@ -79,28 +63,25 @@
             Select2
         },
         props: {
-            errors: Object
+            errors: Object,
+            temporadas : Object
         },
-        setup() {
+        setup(props) {
                 const form =  reactive({
                     nombre: null,
-                    marca: null,
-                    modelo: null,
-                    tipo: null,
-                    year: null,
-                    serie: null,
+                    temporada: null,
                 });
 
-                const options = [
-                        { text: 'Normal', id: 'normal' },
-                        { text: 'Arriendo', id: 'arriendo' }
-                    ];
+                const temporadaOpc = [];
+                    props.temporadas.forEach( function(element) {
+                        temporadaOpc.push({'id' : element.nombre,'text' : element.nombre})
+                });
 
                 const storeData = () => {
                     Inertia.post('/machine', {...form})
                 }
 
-                return {form,storeData,options}
+                return {form,storeData,temporadaOpc}
         }
     }
 

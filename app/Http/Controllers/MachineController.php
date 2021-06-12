@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Machine;
+use App\Models\Temporada;
 use Illuminate\Http\Request;
 
 class MachineController extends Controller
@@ -21,18 +22,16 @@ class MachineController extends Controller
 
     public function create()
     {
-        return Inertia::render('Machine/Create');
+        return Inertia::render('Machine/Create',[
+            'temporadas' => Temporada::active()->orderBy('id', 'desc')->get('nombre'),
+        ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'nombre' => 'required|unique:machines',
-            'modelo' => 'required',
-            'tipo' => 'required',
-            'year' => 'required|integer',
-            'serie' => 'required',
-            'marca' => 'required'
+            'temporada' => 'required',
         ]);
 
         $request->merge(['user_id' => auth()->user()->id]);
@@ -56,7 +55,8 @@ class MachineController extends Controller
     public function edit(Machine $machine)
     {
         return Inertia::render('Machine/Edit',[
-            'machine' => $machine
+            'machine' => $machine,
+            'temporadas' => Temporada::active()->orderBy('id', 'desc')->get('nombre'),
         ]);
     }
 
@@ -64,11 +64,7 @@ class MachineController extends Controller
     {
         $request->validate([
             'nombre' => 'required',
-            'modelo' => 'required',
-            'tipo' => 'required',
-            'year' => 'required|integer',
-            'serie' => 'required',
-            'marca' => 'required'
+            'temporada' => 'required',
         ]);
 
         $machine->update($request->all());
