@@ -27,7 +27,7 @@ class ReporteController extends Controller
             'reportes' => Reporte::with(['user','userAnular'])->orderBy('id', 'desc')
             ->where('maquina', 'LIKE' , "%$request->search%")
             ->orWhere('productor', 'LIKE' , "%$request->search%")
-            ->simplePaginate(6)
+            ->simplePaginate(6),
         ]);
     }
 
@@ -38,12 +38,45 @@ class ReporteController extends Controller
      */
     public function create()
     {
+        $date = Carbon::now(); // todos los días de la semana.
+        $startOfWeek = $date->startOfWeek()->subDay();
+
+        for ($i = 0; $i < 7; $i++) {
+            $weekDays[$i]['dates'] = $startOfWeek->addDay()->startOfDay()->copy()->format('d-m-Y');
+            $weekDays[$i]['dayName'] = $startOfWeek->locale('es')->dayName;
+            if ($weekDays[$i]['dates'] == Carbon::now()->format('d-m-Y')) { //validar que sea hoy
+                $weekDays[$i]['todayValidation'] = true;
+            }else{
+                $weekDays[$i]['todayValidation'] = false;
+            }
+
+            if ($weekDays[$i]['dates'] == Carbon::now()->subDay()->format('d-m-Y')) { //validar que sea el dia de ayer
+                $weekDays[$i]['yesterdayValidation'] = true;
+            }else{
+                $weekDays[$i]['yesterdayValidation'] = false;
+            }
+        }
+
+        $weekMap = [
+            0 => 'DOM',
+            1 => 'LUN',
+            2 => 'MART',
+            3 => 'MIER',
+            4 => 'JUEV',
+            5 => 'VIER',
+            6 => 'SAB',
+        ];
+
+        $wd = $date->dayOfWeek;
+
+        //  dd($weekMap[$wd],$weekDays, $wd);
         return Inertia::render('Reporte/Create',[
             'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
             'campo' => Campo::orderBy('id', 'desc')->get('nombre'),
             'maquina' => Machine::orderBy('id', 'desc')->active()->get('nombre'),
             'variedad' => Variedad::orderBy('id', 'desc')->get('nombre'),
             'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get('nombre'),
+            'weeks' => $weekDays
         ]);
     }
 
@@ -197,5 +230,10 @@ class ReporteController extends Controller
         }else{
             return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
         }
+    }
+
+    public function validateDatesAfterStoreReport(Request $request)
+    {
+        return redirect()->route('reporte.create')->with('message' , '¡Reporte Clonado Exitosamente!');
     }
 }

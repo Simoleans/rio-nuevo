@@ -14,6 +14,25 @@
                             <h3 class="text-lg text-gray-900">Crear un Reporte</h3>
                             <p class="text-sm text-gray-500">(*) Campos Requeridos</p>
                         </div>
+                        <div class="p-6 w-full">
+                            <div class="grid grid-cols-4 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                                <div v-for="(w,i) in weeks" :key="i" class="col-span-2 md:col-span-1 hover:shadow-lg">
+                                    <div class="flex flex-col bg-gray-300 shadow-sm rounded p-4 " :class="{
+                                        'bg-blue-300' : w.todayValidation, 
+                                        'bg-blue-200' : w.yesterdayValidation, 
+                                        'cursor-not-allowed': !w.yesterdayValidation && !w.todayValidation , 
+                                        'cursor-pointer' : w.yesterdayValidation || w.todayValidation }" >
+                                        <div class="flex flex-col items-center justify-center flex-shrink-0 h-12 w-full rounded-xl bg-blue-400 text-white">
+                                            {{ w.dayName.toUpperCase() }}
+                                        </div>
+                                        <div class="flex flex-col flex-grow ml-4 items-center justify-center pt-2">
+                                            <a v-if="w.yesterdayValidation || w.todayValidation" @click="validateDate(w.dates)" class="text-sm text-blue-800 font-extrabold text-md">Asignar Fecha</a>
+                                            <div class="font-bold text-md">{{ w.dates }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="md:col-span-2 mt-5 md:mt-0">
                         <div class="shadow bg-white md:rounded-md p-4">
@@ -149,6 +168,7 @@
             maquina : Object,
             tipo_cultivo : Object,
             variedad : Object,
+            weeks : Object
         },
         setup(props) {
                 const form =  ref({
@@ -168,6 +188,8 @@
                     observacion : null,
                     fecha : new Date().toISOString().substr(0, 10)
                 });
+
+                console.log(props.weeks)
 
                 const productorOpt = [];
                 const campoOpt = [];
@@ -221,7 +243,16 @@
                         Inertia.post('/reporte', {...form.value})
                 }
 
-                return {form,storeData,productorOpt,campoOpt,maquinaOpt,variedadOpt,tipo_cultivoOpt,tipo_bandejaOpt,copyKgTeorico}
+                const validateDate = (d) => {
+                    Inertia.post('/report/validate/date', {date : d}, 
+                    {
+                        preserveState : true,
+                        preserveScroll: true,
+                        onSuccess: page => {console.log(page) }
+                    });
+                }
+
+                return {form,storeData,productorOpt,campoOpt,maquinaOpt,variedadOpt,tipo_cultivoOpt,tipo_bandejaOpt,copyKgTeorico,validateDate}
         }
     }
 

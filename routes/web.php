@@ -40,6 +40,7 @@ Route::middleware(['auth:sanctum','user-inactive'])->group(function () {
     Route::put('/reporte/enable/{reporte}',[ReporteController::class,'enableReporte'])->name('reporte.enable');
     route::get('reporte/clone/{reporte}',[ReporteController::class,'cloneView'])->name('reporte.cloneView');
     Route::post('/reporte/clone',[ReporteController::class,'clone'])->name('reporte.clone');
+    route::post('/report/validate/date',[ReporteController::class,'validateDatesAfterStoreReport'])->name('validateDatesAfterStoreReport');
 });
 
 Route::middleware(['auth:sanctum','user-inactive','admin'])->group(function () {
