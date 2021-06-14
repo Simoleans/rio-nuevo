@@ -12,7 +12,7 @@ class VariedadController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Variedad/Index', [
-            'variedads' => Variedad::orderBy('id', 'desc')
+            'variedads' => Variedad::with('tipo_cultivo')->orderBy('id', 'desc')
             ->where('nombre', 'LIKE' , "%$request->search%")
             ->simplePaginate(6)
         ]);

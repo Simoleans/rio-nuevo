@@ -15,4 +15,8 @@ class Campo extends Model
         
         return $query->where('productor_id',$productor);
     }
+
+    public function productor(){
+        return $this->belongsTo(Productor::class)->withDefault(['razon_social' => 'N/T']);
+    }
 }

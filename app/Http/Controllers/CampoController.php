@@ -17,7 +17,7 @@ class CampoController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Campo/Index', [
-            'campos' => Campo::orderBy('id', 'desc')
+            'campos' => Campo::with('productor')->orderBy('id', 'desc')
             ->where('nombre', 'LIKE' , "%$request->search%")
             ->where('status',1)
             ->simplePaginate(6)

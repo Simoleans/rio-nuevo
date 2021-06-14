@@ -14,4 +14,8 @@ class Variedad extends Model
     public function scopeCultivo($query,$id){
         return $query->where('tipo_cultivo_id',$id);
     }
+
+    public function tipo_cultivo(){
+        return $this->belongsTo(TipoCultivo::class)->withDefault(['nombre' => 'N/T']);
+    }
 }
