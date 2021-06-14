@@ -29,7 +29,7 @@ class ReporteController extends Controller
             ->whereHas('maquina', function($query) use ($request) {
                 $query->where('nombre', 'LIKE' , "%$request->search%");
             })
-            ->whereHas('productor', function($query) use ($request) {
+            ->OrwhereHas('productor', function($query) use ($request) {
                 $query->where('razon_social', 'LIKE' , "%$request->search%");
             })
             ->simplePaginate(6),

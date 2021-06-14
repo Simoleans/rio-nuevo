@@ -158,9 +158,6 @@
         props : {
             reportes : Object,
         },
-        created(){
-            console.log(this.reportes)
-        },
         data() 
         {
             return {
