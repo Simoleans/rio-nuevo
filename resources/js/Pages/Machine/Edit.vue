@@ -23,8 +23,8 @@
                                 <jet-input-error :message="errors.nombre" class="mt-2" />
 
                                 <jet-label for="temporada" value="Temporadas (*)" />
-                                <Select2 required v-model="form.temporada" :options="temporadaOpc" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
-                                <jet-input-error :message="errors.temporada" class="mt-2" />
+                                <Select2 required v-model="form.temporada_id" :options="temporadaOpc" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                <jet-input-error :message="errors.temporada_id" class="mt-2" />
 
                                 <div class="flex justify-end gap-2 mt-2 items-center">
                                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
@@ -70,12 +70,12 @@
         setup(props) {
                 const form =  reactive({
                     nombre: props.machine.nombre,
-                    temporada: props.machine.temporada,
+                    temporada_id: props.machine.temporada_id,
                 });
 
                 const temporadaOpc = [];
                     props.temporadas.forEach( function(element) {
-                        temporadaOpc.push({'id' : element.nombre,'text' : element.nombre})
+                        temporadaOpc.push({'id' : element.id,'text' : element.nombre})
                 });
 
                 const updateData = () => {

@@ -23,8 +23,8 @@
                                 <jet-input-error :message="errors.nombre" class="mt-2" />
 
                                 <jet-label for="tipo_cultivo" value="T. Cultivo (*)" />
-                                <Select2 required v-model="form.tipo_cultivo" :options="optTipoC" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
-                                <jet-input-error :message="errors.tipo_cultivo" class="mt-2" />
+                                <Select2 required v-model="form.tipo_cultivo_id" :options="optTipoC" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                <jet-input-error :message="errors.tipo_cultivo_id" class="mt-2" />
 
                                 <div class="flex justify-end gap-2 mt-2 items-center">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
@@ -68,13 +68,13 @@
         setup(props) {
                 const form =  reactive({
                     nombre: null,
-                    tipo_cultivo : null,
+                    tipo_cultivo_id : null,
                 });
 
                 const optTipoC = [];
 
                 props.tipo_cultivos.forEach( function(element) {
-                    optTipoC.push({'id' : element.nombre,'text' : element.nombre})
+                    optTipoC.push({'id' : element.id,'text' : element.nombre})
                 });
 
                 const storeData = () => {

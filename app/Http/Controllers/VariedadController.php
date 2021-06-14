@@ -30,7 +30,7 @@ class VariedadController extends Controller
     {
         $request->validate([
             'nombre' => 'required',
-            'tipo_cultivo' => 'required'
+            'tipo_cultivo_id' => 'required'
         ]);
 
         $variedad = Variedad::create($request->all());
@@ -59,7 +59,7 @@ class VariedadController extends Controller
     {
         $request->validate([
             'nombre' => 'required',
-            'tipo_cultivo' => 'required'
+            'tipo_cultivo_id' => 'required'
         ]);
 
         $variedad->update($request->all());
@@ -73,7 +73,9 @@ class VariedadController extends Controller
 
     public function destroy(Variedad $variedad)
     {
-        if($variedad->delete()){
+        $variedad->status = 0;
+
+        if($variedad->update()){
             return redirect()->route('variedad.index')->with('message' , 'Variedad Eliminada');
         }else{
             return redirect()->route('variedad.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');

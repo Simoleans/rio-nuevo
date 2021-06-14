@@ -13,6 +13,7 @@ use App\Models\TipoCultivo;
 use Illuminate\Http\Request;
 use App\Exports\ReporteExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
 
 class ReporteController extends Controller
 {
@@ -24,9 +25,9 @@ class ReporteController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Reporte/Index', [
-            'reportes' => Reporte::with(['user','userAnular'])->orderBy('id', 'desc')
-            ->where('maquina', 'LIKE' , "%$request->search%")
-            ->orWhere('productor', 'LIKE' , "%$request->search%")
+            'reportes' => Reporte::with(['user','userAnular','maquina','productor','campo','tipo_cultivo','variedad'])->orderBy('id', 'desc')
+            // ->where('maquina', 'LIKE' , "%$request->search%")
+            // ->orWhere('productor', 'LIKE' , "%$request->search%")
             ->simplePaginate(6),
         ]);
     }
@@ -41,41 +42,28 @@ class ReporteController extends Controller
         $date = Carbon::now(); // todos los días de la semana.
         $startOfWeek = $date->startOfWeek()->subDay();
 
-        for ($i = 0; $i < 7; $i++) {
-            $weekDays[$i]['dates'] = $startOfWeek->addDay()->startOfDay()->copy()->format('d-m-Y');
+        for ($i = 0; $i < 8; $i++) {
+            $weekDays[$i]['dates'] = $startOfWeek->addDay()->startOfDay()->copy()->format('Y-m-d');
             $weekDays[$i]['dayName'] = $startOfWeek->locale('es')->dayName;
-            if ($weekDays[$i]['dates'] == Carbon::now()->format('d-m-Y')) { //validar que sea hoy
+            if ($weekDays[$i]['dates'] == Carbon::now()->format('Y-m-d')) { //validar que sea hoy
                 $weekDays[$i]['todayValidation'] = true;
             }else{
                 $weekDays[$i]['todayValidation'] = false;
             }
 
-            if ($weekDays[$i]['dates'] == Carbon::now()->subDay()->format('d-m-Y')) { //validar que sea el dia de ayer
+            if ($weekDays[$i]['dates'] == Carbon::now()->subDay()->format('Y-m-d')) { //validar que sea el dia de ayer
                 $weekDays[$i]['yesterdayValidation'] = true;
             }else{
                 $weekDays[$i]['yesterdayValidation'] = false;
             }
         }
 
-        $weekMap = [
-            0 => 'DOM',
-            1 => 'LUN',
-            2 => 'MART',
-            3 => 'MIER',
-            4 => 'JUEV',
-            5 => 'VIER',
-            6 => 'SAB',
-        ];
-
-        $wd = $date->dayOfWeek;
-
-        //  dd($weekMap[$wd],$weekDays, $wd);
         return Inertia::render('Reporte/Create',[
-            'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
-            'campo' => Campo::orderBy('id', 'desc')->get('nombre'),
-            'maquina' => Machine::orderBy('id', 'desc')->active()->get('nombre'),
-            'variedad' => Variedad::orderBy('id', 'desc')->get('nombre'),
-            'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get('nombre'),
+            'productor' => Productor::orderBy('id', 'desc')->get(),
+            'campo' => Campo::orderBy('id', 'desc')->get(),
+            'maquina' => Machine::orderBy('id', 'desc')->active()->get(),
+            'variedad' => Variedad::orderBy('id', 'desc')->get(),
+            'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get(),
             'weeks' => $weekDays
         ]);
     }
@@ -100,25 +88,25 @@ class ReporteController extends Controller
      */
     public function store(Request $request)
     {
-        $validateUsersReport = Reporte::where('user_id',auth()->user()->id)->whereDate('created_at', Carbon::today())->count();
-
+        
+        $validateUsersReport = Reporte::where('user_id',auth()->user()->id)->whereDate('fecha', $request->fecha)->count();
+        
         if($validateUsersReport >= env('REPORT_DIARY_USER') && auth()->user()->isOperador()){
             return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Solo puedes hacer 2 reportes diarios!');
         }
         
         $request->validate([
-            'productor' => 'required',
-            'campo' => 'required',
-            'maquina' => 'required',
-            'tipo_cultivo' => 'required',
-            'variedad' => 'required',
-            'cuartel' => 'required',
+            'productor_id' => 'required',
+            'campo_id' => 'required',
+            'maquina_id' => 'required',
+            'tipo_cultivo_id' => 'required',
+            'variedad_id' => 'required',
             'tipo_bandeja' => 'required',
             'nro_bandeja' => 'required',
             'kg_totales' => 'required',
             'kg_teoricos' => 'required',
-            'petroleo' => 'required',
-            'fecha' => 'required'
+            'fecha' => 'required',
+            'h_anterior' => 'required'
         ]);
 
         $query = Reporte::latest()->first();
@@ -234,6 +222,37 @@ class ReporteController extends Controller
 
     public function validateDatesAfterStoreReport(Request $request)
     {
-        return redirect()->route('reporte.create')->with('message' , '¡Reporte Clonado Exitosamente!');
+        
+
+        $validator = Validator::make($request->all(), [
+            'date' => 'date|date_format:Y-m-d',
+        ]);
+
+        if($validator->fails()){
+            return redirect()->route('reporte.create')->with('class', 'bg-red-500')->with('message' , 'La fecha no tiene un formato correcto!');
+        }
+
+        return redirect()->route('reporte.create')->with('message' , '¡Fecha Agregada Correctamente!');
+        
+    }
+
+    public function hAnterior($id){
+        $maquina = Reporte::maquinaByUser($id)->latest('id')->first('hs_maquina');
+
+        return response()->json($maquina);
+    }
+
+    public function productor_campo($id)
+    {
+        $campos = Campo::productores($id)->get(['id','nombre']);
+
+        return response()->json($campos);
+    }
+
+    public function variedad_cultivo($id)
+    {
+        $variedad = Variedad::cultivo($id)->get(['id','nombre']);
+
+        return response()->json($variedad);
     }
 }

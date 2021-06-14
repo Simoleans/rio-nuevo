@@ -23,13 +23,8 @@
                                 <jet-input-error :message="errors.nombre" class="mt-2" />
 
                                 <jet-label for="tipo_cultivo" value="T. Cultivo (*)" />
-                                <select :class="{ ' border border-red-500' : errors.tipo_cultivo }" class="border-gray-300 w-full focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-2" v-model="form.tipo_cultivo">
-                                    <option value="">Seleccione...</option>
-                                    <option  v-for="tipo_cultivo in tipo_cultivos" :value="tipo_cultivo.nombre" :key="tipo_cultivo.id">
-                                        {{ tipo_cultivo.nombre }}
-                                    </option>
-                                </select>
-                                <jet-input-error :message="errors.tipo_cultivo" class="mt-2" />
+                                <Select2 required v-model="form.tipo_cultivo_id" :options="optTipoC" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                <jet-input-error :message="errors.tipo_cultivo_id" class="mt-2" />
 
                                 <div class="flex justify-end gap-2 mt-2 items-center">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
@@ -56,6 +51,7 @@
     import JetInputError from '@/Jetstream/InputError'
     import JetInput from '@/Jetstream/Input'
     import JetLabel from '@/Jetstream/Label'
+    import Select2 from 'vue3-select2-component'; 
     
 
     export default {
@@ -64,6 +60,7 @@
             JetInputError,
             JetInput,
             JetLabel,
+            Select2
         },
         props: {
             errors: Object,
@@ -73,15 +70,27 @@
         setup(props) {
                 const form =  reactive({
                     nombre: props.variedad.nombre,
-                    tipo_cultivo : props.variedad.tipo_cultivo
+                    tipo_cultivo_id : props.variedad.tipo_cultivo_id
+                });
+
+                const optTipoC = [];
+
+                props.tipo_cultivos.forEach( function(element) {
+                    optTipoC.push({'id' : element.id,'text' : element.nombre})
                 });
 
                 const updateData = () => {
                     Inertia.put(route('variedad.update',props.variedad.id), {...form});
                 }
 
-                return {form,updateData}
+                return {form,updateData,optTipoC}
         }
     }
 
 </script>
+<style>
+    .select2-container .select2-selection--single {
+        height: 38px !important;
+        padding-top: 3px;
+    }
+</style>

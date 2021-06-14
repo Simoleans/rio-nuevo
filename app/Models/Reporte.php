@@ -11,19 +11,17 @@ class Reporte extends Model
 
     protected $fillable = [
             'user_id',
-            'productor',
-            'campo',
-            'maquina',
-            'tipo_cultivo',
-            'variedad',
+            'productor_id',
+            'campo_id',
+            'maquina_id',
+            'h_anterior',
+            'tipo_cultivo_id',
+            'variedad_id',
             'hs_maquina',
-            'cuartel',
             'tipo_bandeja',
             'nro_bandeja',
             'kg_totales',
             'kg_teoricos',
-            'petroleo',
-            'hectareas',
             'observacion',
             'status',
             'user_anular',
@@ -36,9 +34,34 @@ class Reporte extends Model
         return $query->where('status',1);
     }
 
+    public function scopeMaquinaByUser($query,$maquina){
+
+        return $query->where('maquina_id',$maquina)->where('user_id',auth()->user()->id);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function maquina(){
+        return $this->belongsTo(Machine::class,'maquina_id')->withDefault(['nombre' => 'N/T']);
+    }
+
+    public function productor(){
+        return $this->belongsTo(Productor::class,'productor_id')->withDefault(['razon_social' => 'N/T']);
+    }
+
+    public function campo(){
+        return $this->belongsTo(Campo::class,'campo_id')->withDefault(['nombre' => 'N/T']);
+    }
+
+    public function tipo_cultivo(){
+        return $this->belongsTo(TipoCultivo::class,'tipo_cultivo_id')->withDefault(['nombre' => 'N/T']);
+    }
+
+    public function variedad(){
+        return $this->belongsTo(Variedad::class,'variedad_id')->withDefault(['nombre' => 'N/T']);
     }
 
     public function userAnular()
@@ -46,9 +69,9 @@ class Reporte extends Model
         return $this->belongsTo(User::class,'user_anular')->withDefault(['name' => 'N/T']);
     }
 
-    public function maquina(){
-        return Machine::where('nombre',$this->maquina)->first();
-    }
+    // public function maquina(){
+    //     return Machine::where('nombre',$this->maquina)->first();
+    // }
 
     public function concatenadoLiquidacion()
     {

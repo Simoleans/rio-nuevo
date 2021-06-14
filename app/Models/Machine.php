@@ -12,13 +12,18 @@ class Machine extends Model
     protected $fillable = [
             'user_id',
             'nombre',
-            'temporada',
+            'temporada_id',
             'status',
     ];
 
     public function users()
     {
         return $this->hasOne(User::class,);
+    }
+
+    public function temporada()
+    {
+        return $this->belongsTo(Temporada::class,)->withDefault(['nombre' => 'N/T']);
     }
 
     public function scopeActive($query){

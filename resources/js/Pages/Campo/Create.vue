@@ -24,8 +24,8 @@
                                 <jet-input-error :message="errors.nombre" class="mt-2" />
 
                                 <jet-label for="productor" value="Productor (*)" />
-                                <Select2 required v-model="form.productor" :options="productorOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
-                                <jet-input-error :message="errors.productor" class="mt-2" />
+                                <Select2 required v-model="form.productor_id" :options="productorOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                <jet-input-error :message="errors.productor_id" class="mt-2" />
 
                                 <jet-label for="localidad" value="Localidad (*)" />
                                 <jet-input id="localidad" type="text" :errors="errors.localidad" class="mt-1 block w-full" v-model="form.localidad"/>
@@ -73,13 +73,13 @@
         setup(props) {
             const form =  reactive({
                 nombre: null,
-                productor : null,
+                productor_id : null,
                 localidad : null
             });
 
             const productorOpt = [];
             props.productor.forEach( function(element) {
-                productorOpt.push({'id' : element.razon_social,'text' : element.razon_social})
+                productorOpt.push({'id' : element.id,'text' : element.razon_social})
             });
 
             const storeData = () => {

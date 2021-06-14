@@ -9,5 +9,9 @@ class Variedad extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tipo_cultivo','nombre'];
+    protected $fillable = ['tipo_cultivo_id','nombre'];
+
+    public function scopeCultivo($query,$id){
+        return $query->where('tipo_cultivo_id',$id);
+    }
 }

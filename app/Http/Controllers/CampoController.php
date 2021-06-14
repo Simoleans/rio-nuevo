@@ -19,6 +19,7 @@ class CampoController extends Controller
         return Inertia::render('Campo/Index', [
             'campos' => Campo::orderBy('id', 'desc')
             ->where('nombre', 'LIKE' , "%$request->search%")
+            ->where('status',1)
             ->simplePaginate(6)
         ]);
     }
@@ -31,7 +32,7 @@ class CampoController extends Controller
     public function create()
     {
         return Inertia::render('Campo/Create',[
-            'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
+            'productor' => Productor::orderBy('id', 'desc')->get(),
         ]);
     }
 
@@ -46,7 +47,7 @@ class CampoController extends Controller
         $request->validate([
             'nombre' => 'required',
             'localidad' => 'required',
-            'productor' => 'required'
+            'productor_id' => 'required'
         ]);
 
         $campo = Campo::create($request->all());
@@ -79,7 +80,7 @@ class CampoController extends Controller
     {
         return Inertia::render('Campo/Edit',[
             'campo' => $campo,
-            'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
+            'productor' => Productor::orderBy('id', 'desc')->get(),
         ]);
     }
 
@@ -95,7 +96,7 @@ class CampoController extends Controller
         $request->validate([
             'nombre' => 'required',
             'localidad' => 'required',
-            'productor' => 'required'
+            'productor_id' => 'required'
         ]);
 
         $campo->update($request->all());
@@ -115,7 +116,9 @@ class CampoController extends Controller
      */
     public function destroy(Campo $campo)
     {
-        if($campo->delete()){
+        $campo->status = 0;
+
+        if($campo->update()){
             return redirect()->route('campo.index')->with('message' , 'Campo Eliminado');
         }else{
             return redirect()->route('campo.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');

@@ -14,7 +14,7 @@ class MachineController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Machine/Index', [
-            'machines' => Machine::orderBy('id', 'desc')
+            'machines' => Machine::with(['temporada'])->orderBy('id', 'desc')
             ->where('nombre', 'LIKE' , "%$request->search%")
             ->simplePaginate(6)
         ]);
@@ -24,7 +24,7 @@ class MachineController extends Controller
     public function create()
     {
         return Inertia::render('Machine/Create',[
-            'temporadas' => Temporada::active()->orderBy('id', 'desc')->get('nombre'),
+            'temporadas' => Temporada::active()->orderBy('id', 'desc')->get(['id','nombre']),
         ]);
     }
 
@@ -32,7 +32,7 @@ class MachineController extends Controller
     {
         $request->validate([
             'nombre' => 'required|unique:machines',
-            'temporada' => 'required',
+            'temporada_id' => 'required',
         ]);
 
         $request->merge(['user_id' => auth()->user()->id]);
@@ -57,7 +57,7 @@ class MachineController extends Controller
     {
         return Inertia::render('Machine/Edit',[
             'machine' => $machine,
-            'temporadas' => Temporada::active()->orderBy('id', 'desc')->get('nombre'),
+            'temporadas' => Temporada::active()->orderBy('id', 'desc')->get(['id','nombre']),
         ]);
     }
 
@@ -65,7 +65,7 @@ class MachineController extends Controller
     {
         $request->validate([
             'nombre' => 'required',
-            'temporada' => 'required',
+            'temporada_id' => 'required',
         ]);
 
         $machine->update($request->all());

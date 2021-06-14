@@ -41,15 +41,15 @@
                                     <tr v-for="(reporte,i) in reportes.data" :key="i" class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
                                         <td @click="showData({...reporte})" class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Productor</span>
-                                            {{ reporte.productor }}
+                                            {{ reporte.productor.razon_social }}
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Maquina</span>
-                                            {{ reporte.maquina }}
+                                            {{ reporte.maquina.nombre }}
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Campo</span>
-                                            {{ reporte.campo }}
+                                            {{ reporte.campo.nombre }}
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">T. Bandeja</span>
@@ -92,22 +92,19 @@
         <!-- Show Account Modal -->
         <jet-dialog-modal :show="showModalData" @close="closeModalShow">
             <template #title>
-                <strong>{{ modal.productor }} - {{ modal.maquina }} | <span v-show="modal.status == 0"> Anulado por : {{ modal.user_anular.name }}</span></strong>
+                <strong>{{ modal.productor.razon_social }} - {{ modal.maquina.nombre }} | <span v-show="modal.status == 0"> Anulado por : {{ modal.user_anular.name }}</span></strong>
             </template>
             
             <template #content>
                 <div class="flex justify-between mb-5">
                     <div class="flex flex-col gap-2">
-                        <p>Campo:</p><strong>{{ modal.campo }}</strong>
-                        <p>Variedad:</p><strong>{{ modal.variedad }}</strong>
-                        <p>T. Cultivo:</p><strong>{{ modal.tipo_cultivo }}</strong>
-                        <p>Cuartel:</p><strong>{{ modal.cuartel }}</strong>
-                        <p>Petróleo:</p><strong>{{ modal.petroleo }}</strong>
-                        <p>Hectareas:</p><strong>{{ modal.hectareas }}</strong>
-                    </div>
-                    <div class="flex flex-col gap-2">
+                        <p>Campo:</p><strong>{{ modal.campo.nombre }}</strong>
+                        <p>Variedad:</p><strong>{{ modal.variedad.nombre }}</strong>
+                        <p>T. Cultivo:</p><strong>{{ modal.tipo_cultivo.nombre }}</strong>
                         <p>T. Bandeja:</p><strong>{{ modal.tipo_bandeja }}</strong>
                         <p>Nro. Bandeja:</p><strong>{{ modal.nro_bandeja }}</strong>
+                    </div>
+                    <div class="flex flex-col gap-2">
                         <p>Kg Totales:</p><strong>{{ modal.kg_totales }}</strong>
                         <p>Kg Teóricos:</p><strong>{{ modal.kg_teoricos }}</strong>
                         <p>Hs. Maquina:</p><strong>{{ modal.hs_maquina }}</strong>
@@ -116,15 +113,15 @@
                 </div>
                 <div class="border-t border-gray-300 mb-2"></div>
                 <div class="flex flex-col gap-2">
-                    <p>Observación:</p><strong>{{ modal.observacion }}</strong>
+                    <p>Observación:</p><strong>{{ modal.observacion ?? 'N/T' }}</strong>
                 </div>
             </template>
 
             <template #footer>
             <div class="flex flex-col md:flex-row lg:flex-row justify-between gap-4">
-                <a v-show="modal.status == 1" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.cloneView',modal.id)">
+                <!-- <a v-show="modal.status == 1" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.cloneView',modal.id)">
                     Clonar
-                </a>
+                </a> -->
                 <jet-button v-show="modal.status == 0" :class="{ 'opacity-25': processing }" :disabled="processing" @click="enableReporte(modal.id)">
                     Activar Reporte
                 </jet-button>
@@ -160,6 +157,9 @@
         },
         props : {
             reportes : Object,
+        },
+        created(){
+            console.log(this.reportes)
         },
         data() 
         {

@@ -9,5 +9,10 @@ class Campo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nombre','localidad','productor'];
+    protected $fillable = ['nombre','localidad','productor_id'];
+
+    public function scopeProductores($query,$productor){
+        
+        return $query->where('productor_id',$productor);
+    }
 }
