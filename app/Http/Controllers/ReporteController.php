@@ -40,9 +40,9 @@ class ReporteController extends Controller
     public function create()
     {
         $date = Carbon::now(); // todos los días de la semana.
-        $startOfWeek = $date->startOfWeek()->subDay();
+        $startOfWeek = $date->startOfWeek()->subDays(2);
 
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < 9; $i++) {
             $weekDays[$i]['dates'] = $startOfWeek->addDay()->startOfDay()->copy()->format('Y-m-d');
             $weekDays[$i]['dayName'] = $startOfWeek->locale('es')->dayName;
             if ($weekDays[$i]['dates'] == Carbon::now()->format('Y-m-d')) { //validar que sea hoy
