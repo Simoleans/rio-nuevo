@@ -26,8 +26,12 @@ class ReporteController extends Controller
     {
         return Inertia::render('Reporte/Index', [
             'reportes' => Reporte::with(['user','userAnular','maquina','productor','campo','tipo_cultivo','variedad'])->orderBy('id', 'desc')
-            // ->where('maquina', 'LIKE' , "%$request->search%")
-            // ->orWhere('productor', 'LIKE' , "%$request->search%")
+            ->whereHas('maquina', function($query) use ($request) {
+                $query->where('nombre', 'LIKE' , "%$request->search%");
+            })
+            ->whereHas('productor', function($query) use ($request) {
+                $query->where('razon_social', 'LIKE' , "%$request->search%");
+            })
             ->simplePaginate(6),
         ]);
     }

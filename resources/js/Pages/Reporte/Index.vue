@@ -16,7 +16,7 @@
                     <div class="md:col-span-3 mt-5 md:mt-0">
                         <div class="shadow bg-white md:rounded-md p-4">
                             <div class="flex justify-between items-center gap-6">
-                                <input type="text" class="form-input rounded-md shadow-md p-2 m-1" placeholder="Buscar..." v-model="search">
+                                <input type="text" class="form-input rounded-md shadow-md p-2 m-1 md:w-1/3 lg:w-1/3" placeholder="Buscar por Productor | Maquina" v-model="search">
                                 <div class="flex flex-col md:flex-row lg:flex-row justify-between items-center gap-3">
                                     <a v-if="reportes.data.length > 0 && $page.props.user.admin" class="text-blue-400 hover:text-blue-600 underline" :href="route('excelExport')">
                                         Descargar
