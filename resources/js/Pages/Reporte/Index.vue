@@ -171,7 +171,7 @@
                 <a class="bg-blue-500 hover:bg-blue-600 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition" :href="route('createFechaReport',date)">
                     Crear Reporte
                 </a>
-                <a v-show="lastReportToUser.id != null" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.cloneView',lastReportToUser.id)">
+                <a v-show="lastReport != 0" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.cloneView',lastReport)">
                     Clonar
                 </a>
                 <!-- <jet-secondary-button class="ml-2" @click="closeModalShow">
@@ -219,7 +219,8 @@
                 id : null,
                 showModalData : false,
                 showModalOptions : false,
-                date: null
+                date: null,
+                lastReport : this.lastReportToUser != null ? this.lastReportToUser.id : 0
             }
         },
         methods : {
@@ -249,8 +250,6 @@
             showOptions(date){
                 this.showModalOptions = true;
                 this.date = date;
-                // this.modal = {...reporte};
-                // setTimeout(() => this.processing = false, 1050)
             },
             deletereporte(){
                 Inertia.delete(this.route('reporte.destroy' , this.id), {

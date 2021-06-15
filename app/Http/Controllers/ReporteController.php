@@ -30,21 +30,28 @@ class ReporteController extends Controller
 
         for ($i = 0; $i < 7; $i++) {
             $weekDays[$i]['dates'] = $startOfWeek->addDay()->startOfDay()->copy()->format('Y-m-d');
-            $weekDays[$i]['encriptedDate'] = encrypt($startOfWeek->addDay()->startOfDay()->copy()->format('Y-m-d'));
+            $weekDays[$i]['encriptedDate'] = encrypt($weekDays[$i]['dates']);
             $weekDays[$i]['dayName'] = $startOfWeek->locale('es')->dayName;
-            if ($weekDays[$i]['dates'] == Carbon::now()->format('Y-m-d')) { //validar que sea hoy
-                $weekDays[$i]['todayValidation'] = true;
-            }else{
-                $weekDays[$i]['todayValidation'] = false;
-            }
+            // if ($weekDays[$i]['dates'] == Carbon::now()->format('Y-m-d')) { //validar que sea hoy
+            //     $weekDays[$i]['todayValidation'] = true;
+            // }else{
+            //     $weekDays[$i]['todayValidation'] = false;
+            // }
 
-            if ($weekDays[$i]['dates'] == Carbon::now()->subDay()->format('Y-m-d')) { //validar que sea el dia de ayer
-                $weekDays[$i]['yesterdayValidation'] = true;
-            }else{
-                $weekDays[$i]['yesterdayValidation'] = false;
-            }
+            // if ($weekDays[$i]['dates'] == Carbon::now()->subDay()->format('Y-m-d')) { //validar que sea el dia de ayer
+            //     $weekDays[$i]['yesterdayValidation'] = true;
+            // }else{
+            //     $weekDays[$i]['yesterdayValidation'] = false;
+            // }
         }
 
+        // $startOfWeek = $date->startOfWeek()->subDay();
+        //     $weekDays = [];
+
+        //     for ($i = 0; $i < 7; $i++) {
+        //         $weekDays[] = $startOfWeek->addDay()->startOfDay()->copy();
+        //     }
+        // dd($weekDays);
         return Inertia::render('Reporte/Index', [
             'reportes' => Reporte::with(['user','userAnular','maquina','productor','campo','tipo_cultivo','variedad'])->orderBy('id', 'desc')
             ->whereHas('maquina', function($query) use ($request) {
