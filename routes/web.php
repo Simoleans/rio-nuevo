@@ -34,13 +34,13 @@ Route::get('/', function () {
 })->name('loginView');
 
 Route::middleware(['auth:sanctum','user-inactive'])->group(function () {
-    Route::resource('/reporte',ReporteController::class);
+    Route::resource('/reporte',ReporteController::class)->except(['create']);
     Route::get('/reporte/excel/export',[ReporteController::class,'excelExport'])->name('excelExport');
     Route::put('/finalizarReporte/{reporte}',[ReporteController::class,'disabledReporte'])->name('disabledReporte');
     Route::put('/reporte/enable/{reporte}',[ReporteController::class,'enableReporte'])->name('reporte.enable');
     route::get('reporte/clone/{reporte}',[ReporteController::class,'cloneView'])->name('reporte.cloneView');
     Route::post('/reporte/clone',[ReporteController::class,'clone'])->name('reporte.clone');
-    route::post('/report/validate/date',[ReporteController::class,'validateDatesAfterStoreReport'])->name('validateDatesAfterStoreReport');
+    route::get('/report/create/{date}',[ReporteController::class,'createFechaReport'])->name('createFechaReport');
     Route::get('/report/hAnterior/{id}',[ReporteController::class,'hAnterior'])->name('hAnterior');
     Route::get('/report/productor/campo/{id}',[ReporteController::class,'productor_campo'])->name('productor_campo');
     Route::get('/report/productor/variedad/{id}',[ReporteController::class,'variedad_cultivo'])->name('variedad_cultivo');

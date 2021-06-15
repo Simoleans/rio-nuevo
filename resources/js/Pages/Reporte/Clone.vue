@@ -20,20 +20,24 @@
                             <form @submit.prevent="storeData">
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
-                                        <jet-label for="campo" value="Maquina (*)" />
-                                        <Select2 v-model="form.maquina" :options="maquinaOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
-                                        <jet-input-error :message="errors.campo" class="mt-2" />
+                                        <jet-label for="maquina" value="Maquina (*)" />
+                                        <Select2 v-model="form.maquina_id" :options="maquinaOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                        <jet-input-error :message="errors.maquina_id" class="mt-2" />
+                                    </div>
+                                    <div>
+                                        <jet-label for="fecha" value="Fecha (*)" />
+                                        <span class="text-lg font-extrabold">{{  form.fecha_mostrar }}</span>
                                     </div>
                                     <div>
                                         <jet-label for="tipo_cultivo" value="T. Cultivo (*)" />
-                                        <Select2 required v-model="form.tipo_cultivo" :options="tipo_cultivoOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
-                                        <jet-input-error :message="errors.tipo_cultivo" class="mt-2" />
+                                        <Select2 required v-model="form.tipo_cultivo_id" :options="tipo_cultivoOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                        <jet-input-error :message="errors.tipo_cultivo_id" class="mt-2" />
                                     </div>
-                                </div>
-                                <jet-label for="variedad" value="Variedad (*)" />
-                                <Select2 required v-model="form.variedad" :options="variedadOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
-                                <jet-input-error :message="errors.variedad" class="mt-2" />
-                                <div class="grid grid-cols-3 gap-3">
+                                    <div>
+                                        <jet-label for="variedad" value="Variedad (*)" />
+                                        <Select2 required v-model="form.variedad_id" :options="variedadOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                        <jet-input-error :message="errors.variedad_id" class="mt-2" />
+                                    </div>
                                     <div>
                                         <jet-label for="tipo_bandeja" value="T. Bandeja (*)" />
                                         <select :class="{ ' border border-red-500' : errors.tipo_bandeja }" class="border-gray-300 w-full focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1" v-model="form.tipo_bandeja">
@@ -44,19 +48,6 @@
                                         </select>
                                         <jet-input-error :message="errors.tipo_bandeja" class="mt-2" />
                                     </div>
-
-                                    <div>
-                                        <jet-label for="cuartel" value="Cuartel (*)" />
-                                        <jet-input required id="cuartel" type="number" :errors="errors.cuartel" class="mt-1 block w-full" v-model="form.cuartel"/>
-                                        <jet-input-error :message="errors.cuartel" class="mt-2" />
-                                    </div>
-                                    <div>
-                                        <jet-label for="fecha" value="Fecha (*)" />
-                                        <jet-input required id="fecha" type="date"  :errors="errors.fecha" class="mt-1 block w-full" v-model="form.fecha"/>
-                                        <jet-input-error :message="errors.fecha" class="mt-2" />
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-3 gap-3">
                                     <div>
                                         <jet-label for="nro_bandeja" value="Nro . Bandejas (*)" />
                                         <jet-input required id="nro_bandeja" type="number" :errors="errors.nro_bandeja" class="mt-1 block w-full" v-model="form.nro_bandeja"/>
@@ -73,24 +64,16 @@
                                         <jet-input required id="kg_teoricos" type="number" readonly :errors="errors.kg_teoricos" class="mt-1 block w-full" v-model="form.kg_teoricos"/>
                                         <jet-input-error :message="errors.kg_teoricos" class="mt-2" />
                                     </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-3">
                                     <div>
                                         <jet-label for="productor" value="Productor (*)" />
-                                        <Select2 required v-model="form.productor" :options="productorOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
-                                        <jet-input-error :message="errors.productor" class="mt-2" />
+                                        <Select2 required v-model="form.productor_id" :options="productorOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                        <jet-input-error :message="errors.productor_id" class="mt-2" />
                                     </div>
-                                    <div>
+                                    <div class="tooltip">
                                         <jet-label for="campo" value="Campo (*)" />
-                                        <Select2 required v-model="form.campo" :options="campoOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
-                                        <jet-input-error :message="errors.campo" class="mt-2" />
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-3 gap-3">
-                                    <div>
-                                        <jet-label for="petroleo" value="Petróleo (*)" />
-                                        <jet-input required id="petroleo" type="number" :errors="errors.petroleo" class="mt-1 block w-full" v-model="form.petroleo"/>
-                                        <jet-input-error :message="errors.petroleo" class="mt-2" />
+                                        <Select2 required v-model="form.campo_id" :options="campoOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                        <jet-input-error :message="errors.campo_id" class="mt-2" />
+                                        <span class="tooltiptext">El Campo y Productor lo debe ver en el acta de movilización del SAG</span>
                                     </div>
                                     <div>
                                         <jet-label for="hs_maquina" value="Hs. Maquina (*)" />
@@ -98,18 +81,19 @@
                                         <jet-input-error :message="errors.hs_maquina" class="mt-2" />
                                     </div>
                                     <div>
-                                        <jet-label for="hectareas" value="Hectáreas (*)" />
-                                        <jet-input id="hectareas" type="number" :errors="errors.hectareas" class="mt-1 block w-full" v-model="form.hectareas"/>
-                                        <jet-input-error :message="errors.hectareas" class="mt-2" />
+                                        <jet-label for="h_anterior" value="Hora Anterior (*)" />
+                                        <jet-input id="h_anterior" readonly type="number" :errors="errors.h_anterior" class="mt-1 bg-gray-200 block w-full" v-model="form.h_anterior"/>
+                                        <jet-input-error :message="errors.h_anterior" class="mt-2" />
+                                    </div>
+                                    <div class="col-span-2">
+                                        <jet-label for="observacion" value="Observación" />
+                                        <textarea v-model="form.observacion" class="border-gray-300 focus:border-indigo-300 w-full focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
+                                        <jet-input-error :message="errors.observacion" class="mt-2" />
                                     </div>
                                 </div>
-                                <jet-label for="observacion" value="Observación (*)" />
-                                <textarea v-model="form.observacion" class="border-gray-300 focus:border-indigo-300 w-full focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
-                                <jet-input-error :message="errors.observacion" class="mt-2" />
-                                
                                 <div class="flex justify-end gap-2 mt-2 items-center">
                                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white rounded p-3 font-bold">
-                                        Crear
+                                        Clonar
                                     </button>
                                     <inertia-link class="text-blue-400 hover:text-blue-600 underline" :href="route('reporte.index')">
                                         Volver
@@ -149,32 +133,43 @@
             maquina : Object,
             tipo_cultivo : Object,
             variedad : Object,
-            reporte : Object
+            reporte : Object,
+            fecha : String
         },
         setup(props) {
+
                 const form =  ref({
                     cuartel: null,
-                    variedad: props.reporte.variedad,
-                    maquina: props.reporte.maquina,
-                    campo: props.reporte.campo,
-                    productor : props.reporte.productor,
-                    tipo_cultivo : props.reporte.tipo_cultivo,
+                    variedad_id: props.reporte.variedad_id,
+                    maquina_id: null,
+                    campo_id: props.reporte.campo_id,
+                    productor_id: props.reporte.productor_id,
+                    tipo_cultivo_id: props.reporte.tipo_cultivo_id,
                     tipo_bandeja : props.reporte.tipo_bandeja,
                     kg_totales : null,
                     kg_teoricos : null,
                     nro_bandeja : null,
-                    hectareas : null,
-                    petroleo : null,
                     hs_maquina : null,
                     observacion : null,
-                    fecha : new Date().toISOString().substr(0, 10)
+                    fecha : props.reporte.fecha,
+                    fecha_mostrar : props.reporte.fecha,
+                    h_anterior : null
                 });
 
+
                 const productorOpt = [];
-                const campoOpt = [];
+                const campoOpt = ref([]);
                 const maquinaOpt = [];
-                const variedadOpt = [];
+                const variedadOpt = ref([]);
                 const tipo_cultivoOpt = [];
+
+                props.variedad.forEach( function(element) {
+                    variedadOpt.value.push({'id' : element.id,'text' : element.nombre})
+                });
+
+                props.campo.forEach( function(element) {
+                    campoOpt.value.push({'id' : element.id,'text' : element.nombre})
+                });
 
                 const tipo_bandejaOpt = [{
                     'id' : 3.5,
@@ -197,26 +192,57 @@
                     v.kg_teoricos = v.nro_bandeja * v.tipo_bandeja;
                 });
 
-                props.productor.forEach( function(element) {
-                    productorOpt.push({'id' : element.razon_social,'text' : element.razon_social})
-                });
+                watch(
+                    () => form.value.maquina_id,
+                    (v) => {
+                        fetch(route('hAnterior',v))
+                            .then(res => res.json())
+                            .catch(error => console.error('Error:', error))
+                            .then(response => form.value.h_anterior = response.hs_maquina ?? 0);
+                    }
+                )
 
-                props.campo.forEach( function(element) {
-                    campoOpt.push({'id' : element.nombre,'text' : element.nombre})
+                watch(
+                    () => form.value.tipo_cultivo_id,
+                    (v) => {
+                        fetch(route('variedad_cultivo',v))
+                            .then(res => res.json())
+                            .catch(error => console.error('Error:', error))
+                            .then(response => {
+                                variedadOpt.value = [];
+                                response.forEach( function(element) {
+                                    variedadOpt.value.push({'id' : element.id,'text' : element.nombre})
+                                });
+                            });
+                    }
+                )
+
+                watch(
+                    () => form.value.productor_id,
+                    (v) => {
+                        fetch(route('productor_campo',v))
+                            .then(res => res.json())
+                            .catch(error => console.error('Error:', error))
+                            .then(response => {
+                                campoOpt.value = [];
+                                response.forEach( function(element) {
+                                    campoOpt.value.push({'id' : element.id,'text' : element.nombre})
+                                });
+                            });
+                    }
+                )
+
+                props.productor.forEach( function(element) {
+                    productorOpt.push({'id' : element.id,'text' : element.razon_social})
                 });
 
                 props.maquina.forEach( function(element) {
-                    maquinaOpt.push({'id' : element.nombre,'text' : element.nombre})
-                });
-
-                props.variedad.forEach( function(element) {
-                    variedadOpt.push({'id' : element.nombre,'text' : element.nombre})
+                    maquinaOpt.push({'id' : element.id,'text' : element.nombre})
                 });
 
                 props.tipo_cultivo.forEach( function(element) {
-                    tipo_cultivoOpt.push({'id' : element.nombre,'text' : element.nombre})
+                    tipo_cultivoOpt.push({'id' : element.id,'text' : element.nombre})
                 });
-
 
                 const storeData = () => {
                         Inertia.post('/reporte', {...form.value})
@@ -231,6 +257,44 @@
     .select2-container .select2-selection--single {
         height: 38px !important;
         padding-top: 3px;
+    }
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        /* border-bottom: 1px dotted black; */
+    }
+
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 160px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 90%;
+        left: 50%;
+        margin-left: -70px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .tooltip .tooltiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #555 transparent transparent transparent;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
     }
 </style>
 

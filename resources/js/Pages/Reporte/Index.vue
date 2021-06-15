@@ -7,6 +7,24 @@
         </template>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="mb-4 w-full">
+                    <div class="grid grid-cols-2 md:grid-cols-7 lg:grid-cols-7 gap-2">
+                        <div v-for="(w,i) in weeks" :key="i" class="col-span-2 md:col-span-1 hover:shadow-lg">
+                            <div class="flex flex-col bg-gray-300 shadow-sm rounded p-4 " :class="{
+                                'bg-blue-300' : w.todayValidation, 
+                                'bg-blue-200' : w.yesterdayValidation}" >
+                                <div class="flex flex-col items-center justify-center flex-shrink-0 h-12 w-full rounded-xl bg-blue-400 text-white font-extrabold">
+                                    {{ w.dayName.toUpperCase() }}
+                                </div>
+                                <div class="flex flex-col flex-grow ml-4 items-center justify-center pt-2">
+                                    <a @click="showOptions(w.encriptedDate)" class="cursor-pointer text-sm text-blue-800 font-extrabold text-md">Asignar Fecha</a>
+                                    <!-- <a v-else class="text-sm text-red-800 font-extrabold text-md">Fuera de Rango</a> -->
+                                    <div class="font-bold text-md">{{ w.dates }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="md:grid md:grid-cols-4 md:gap-6">
                     <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
@@ -17,14 +35,14 @@
                         <div class="shadow bg-white md:rounded-md p-4">
                             <div class="flex justify-between items-center gap-6">
                                 <input type="text" class="form-input rounded-md shadow-md p-2 m-1 md:w-1/3 lg:w-1/3" placeholder="Buscar por Productor | Maquina" v-model="search">
-                                <div class="flex flex-col md:flex-row lg:flex-row justify-between items-center gap-3">
+                                <!-- <div class="flex flex-col md:flex-row lg:flex-row justify-between items-center gap-3">
                                     <a v-if="reportes.data.length > 0 && $page.props.user.admin" class="text-blue-400 hover:text-blue-600 underline" :href="route('excelExport')">
                                         Descargar
                                     </a>
                                     <inertia-link :href="route('reporte.create')" class="bg-blue-500 hover:bg-blue-700 p-3 rounded font-bold text-white">
                                         Crear Reporte
                                     </inertia-link>
-                                </div>
+                                </div> -->
                             </div>
                             <hr class="my-6">
                             <table class="border-collapse w-full">
@@ -34,6 +52,7 @@
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Maquina</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Campo</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">T. Bandeja</th>
+                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Fecha</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Estatus</th>
                                     </tr>
                                 </thead>
@@ -54,6 +73,10 @@
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">T. Bandeja</span>
                                             {{ reporte.tipo_bandeja }}
+                                        </td>
+                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Fecha</span>
+                                            {{ reporte.fecha }}
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Status</span>
@@ -134,6 +157,33 @@
             </div>
             </template>
         </jet-dialog-modal>
+
+        <!-- modal de opciones -->
+        <jet-dialog-modal :show="showModalOptions" @close="closeModalOptions">
+            <template #title>
+                <strong>Opciones</strong>
+            </template>
+            <template #footer>
+            <div class="flex flex-col md:flex-row lg:flex-row justify-between gap-4 items-center">
+                <!-- <a v-show="modal.status == 1" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.cloneView',modal.id)">
+                    Clonar
+                </a> -->
+                <a class="bg-blue-500 hover:bg-blue-600 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition" :href="route('createFechaReport',date)">
+                    Crear Reporte
+                </a>
+                <a class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.cloneView',lastReportToUser.id)">
+                    Clonar
+                </a>
+                <!-- <jet-secondary-button class="ml-2" @click="closeModalShow">
+                    N/A
+                </jet-secondary-button> -->
+                <!-- <a href="#" class="ml-2 font-bold text-md text-blue-400 underline" @click="closeModalOptions">
+                    Cerrar
+                </a> -->
+            </div>
+            </template>
+        </jet-dialog-modal>
+        <!-- fin modal opciones -->
     </app-layout>
 </template>
 
@@ -157,6 +207,8 @@
         },
         props : {
             reportes : Object,
+            weeks : Object,
+            lastReportToUser : String
         },
         data() 
         {
@@ -166,6 +218,8 @@
                 processing : true,
                 id : null,
                 showModalData : false,
+                showModalOptions : false,
+                date: null
             }
         },
         methods : {
@@ -176,12 +230,27 @@
                 this.confirmDelete = true;
 
             },
+
+            createReport(d){
+                Inertia.get(route('createFechaReport',d));
+            },
             closeModal() {
 
                 this.id = null;
                 this.confirmDelete = false
 
                 this.processing = true;
+            },
+            closeModalOptions() {
+
+                this.showModalOptions = false;
+                this.date = null;
+            },
+            showOptions(date){
+                this.showModalOptions = true;
+                this.date = date;
+                // this.modal = {...reporte};
+                // setTimeout(() => this.processing = false, 1050)
             },
             deletereporte(){
                 Inertia.delete(this.route('reporte.destroy' , this.id), {

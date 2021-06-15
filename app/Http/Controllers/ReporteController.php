@@ -12,6 +12,7 @@ use App\Models\Productor;
 use App\Models\TipoCultivo;
 use Illuminate\Http\Request;
 use App\Exports\ReporteExport;
+use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,30 +25,12 @@ class ReporteController extends Controller
      */
     public function index(Request $request)
     {
-        return Inertia::render('Reporte/Index', [
-            'reportes' => Reporte::with(['user','userAnular','maquina','productor','campo','tipo_cultivo','variedad'])->orderBy('id', 'desc')
-            ->whereHas('maquina', function($query) use ($request) {
-                $query->where('nombre', 'LIKE' , "%$request->search%");
-            })
-            ->OrwhereHas('productor', function($query) use ($request) {
-                $query->where('razon_social', 'LIKE' , "%$request->search%");
-            })
-            ->simplePaginate(6),
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
         $date = Carbon::now(); // todos los días de la semana.
-        $startOfWeek = $date->startOfWeek()->subDays(2);
+        $startOfWeek = $date->startOfWeek()->subDay();
 
-        for ($i = 0; $i < 9; $i++) {
+        for ($i = 0; $i < 7; $i++) {
             $weekDays[$i]['dates'] = $startOfWeek->addDay()->startOfDay()->copy()->format('Y-m-d');
+            $weekDays[$i]['encriptedDate'] = encrypt($startOfWeek->addDay()->startOfDay()->copy()->format('Y-m-d'));
             $weekDays[$i]['dayName'] = $startOfWeek->locale('es')->dayName;
             if ($weekDays[$i]['dates'] == Carbon::now()->format('Y-m-d')) { //validar que sea hoy
                 $weekDays[$i]['todayValidation'] = true;
@@ -62,24 +45,50 @@ class ReporteController extends Controller
             }
         }
 
+        return Inertia::render('Reporte/Index', [
+            'reportes' => Reporte::with(['user','userAnular','maquina','productor','campo','tipo_cultivo','variedad'])->orderBy('id', 'desc')
+            ->whereHas('maquina', function($query) use ($request) {
+                $query->where('nombre', 'LIKE' , "%$request->search%");
+            })
+            ->OrwhereHas('productor', function($query) use ($request) {
+                $query->where('razon_social', 'LIKE' , "%$request->search%");
+            })
+            ->simplePaginate(6),
+            'weeks' => $weekDays,
+            'lastReportToUser' => Reporte::where('user_id',auth()->user()->id)->orderBy('created_at', 'desc')->first(['id'])
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        
+
         return Inertia::render('Reporte/Create',[
             'productor' => Productor::orderBy('id', 'desc')->get(),
             'campo' => Campo::orderBy('id', 'desc')->get(),
             'maquina' => Machine::orderBy('id', 'desc')->active()->get(),
             'variedad' => Variedad::orderBy('id', 'desc')->get(),
             'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get(),
-            'weeks' => $weekDays
         ]);
     }
 
     public function cloneView(Reporte $reporte)
     {
+        if (!Gate::allows('clone-report', $reporte)) {
+            return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡No tienes permisos de clonar este rpeorte!');
+        }
+        
         return Inertia::render('Reporte/Clone',[
-            'productor' => Productor::orderBy('id', 'desc')->get('razon_social'),
-            'campo' => Campo::orderBy('id', 'desc')->get('nombre'),
-            'maquina' => Machine::orderBy('id', 'desc')->active()->get('nombre'),
-            'variedad' => Variedad::orderBy('id', 'desc')->get('nombre'),
-            'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get('nombre'),
+            'productor' => Productor::orderBy('id', 'desc')->get(),
+            'campo' => Campo::where('productor_id',$reporte->productor_id)->orderBy('id', 'desc')->get(),
+            'maquina' => Machine::orderBy('id', 'desc')->active()->get(),
+            'variedad' => Variedad::where('tipo_cultivo_id',$reporte->tipo_cultivo_id)->orderBy('id', 'desc')->get(),
+            'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get(),
             'reporte' => $reporte,
         ]);
     }
@@ -224,19 +233,17 @@ class ReporteController extends Controller
         }
     }
 
-    public function validateDatesAfterStoreReport(Request $request)
+    public function createFechaReport($date)
     {
-        
 
-        $validator = Validator::make($request->all(), [
-            'date' => 'date|date_format:Y-m-d',
+        return Inertia::render('Reporte/Create',[
+            'productor' => Productor::orderBy('id', 'desc')->get(),
+            'campo' => Campo::orderBy('id', 'desc')->get(),
+            'maquina' => Machine::orderBy('id', 'desc')->active()->get(),
+            'variedad' => Variedad::orderBy('id', 'desc')->get(),
+            'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get(),
+            'fecha' => decrypt($date)
         ]);
-
-        if($validator->fails()){
-            return redirect()->route('reporte.create')->with('class', 'bg-red-500')->with('message' , 'La fecha no tiene un formato correcto!');
-        }
-
-        return redirect()->route('reporte.create')->with('message' , '¡Fecha Agregada Correctamente!');
         
     }
 
