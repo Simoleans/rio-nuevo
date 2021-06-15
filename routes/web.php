@@ -41,6 +41,8 @@ Route::middleware(['auth:sanctum','user-inactive'])->group(function () {
     route::get('reporte/clone/{reporte}',[ReporteController::class,'cloneView'])->name('reporte.cloneView');
     Route::post('/reporte/clone',[ReporteController::class,'clone'])->name('reporte.clone');
     route::get('/report/create/{date}',[ReporteController::class,'createFechaReport'])->name('createFechaReport');
+    Route::get('/report/na/{date}',[ReporteController::class,'createReportNA'])->name('createReportNA');
+    Route::post('/report/na',[ReporteController::class,'storeReporteNA'])->name('storeReporteNA');
     Route::get('/report/hAnterior/{id}',[ReporteController::class,'hAnterior'])->name('hAnterior');
     Route::get('/report/productor/campo/{id}',[ReporteController::class,'productor_campo'])->name('productor_campo');
     Route::get('/report/productor/variedad/{id}',[ReporteController::class,'variedad_cultivo'])->name('variedad_cultivo');

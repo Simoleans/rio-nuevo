@@ -11,8 +11,7 @@
                     <div class="grid grid-cols-2 md:grid-cols-7 lg:grid-cols-7 gap-2">
                         <div v-for="(w,i) in weeks" :key="i" class="col-span-2 md:col-span-1 hover:shadow-lg">
                             <div class="flex flex-col bg-gray-300 shadow-sm rounded p-4 " :class="{
-                                'bg-blue-300' : w.todayValidation, 
-                                'bg-blue-200' : w.yesterdayValidation}" >
+                                'bg-blue-300' : w.todayValidation}" >
                                 <div class="flex flex-col items-center justify-center flex-shrink-0 h-12 w-full rounded-xl bg-blue-400 text-white font-extrabold">
                                     {{ w.dayName.toUpperCase() }}
                                 </div>
@@ -174,9 +173,9 @@
                 <a v-show="lastReport != 0" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.cloneView',lastReport)">
                     Clonar
                 </a>
-                <!-- <jet-secondary-button class="ml-2" @click="closeModalShow">
+                <a class="bg-green-500 hover:bg-green-600 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition" :href="route('createReportNA',date)">
                     N/A
-                </jet-secondary-button> -->
+                </a>
                 <!-- <a href="#" class="ml-2 font-bold text-md text-blue-400 underline" @click="closeModalOptions">
                     Cerrar
                 </a> -->

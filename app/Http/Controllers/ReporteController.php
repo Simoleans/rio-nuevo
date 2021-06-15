@@ -32,34 +32,25 @@ class ReporteController extends Controller
             $weekDays[$i]['dates'] = $startOfWeek->addDay()->startOfDay()->copy()->format('Y-m-d');
             $weekDays[$i]['encriptedDate'] = encrypt($weekDays[$i]['dates']);
             $weekDays[$i]['dayName'] = $startOfWeek->locale('es')->dayName;
-            // if ($weekDays[$i]['dates'] == Carbon::now()->format('Y-m-d')) { //validar que sea hoy
-            //     $weekDays[$i]['todayValidation'] = true;
-            // }else{
-            //     $weekDays[$i]['todayValidation'] = false;
-            // }
+            if ($weekDays[$i]['dates'] == Carbon::now()->format('Y-m-d')) { //validar que sea hoy
+                $weekDays[$i]['todayValidation'] = true;
+            }else{
+                $weekDays[$i]['todayValidation'] = false;
+            }
 
-            // if ($weekDays[$i]['dates'] == Carbon::now()->subDay()->format('Y-m-d')) { //validar que sea el dia de ayer
-            //     $weekDays[$i]['yesterdayValidation'] = true;
-            // }else{
-            //     $weekDays[$i]['yesterdayValidation'] = false;
-            // }
         }
-
-        // $startOfWeek = $date->startOfWeek()->subDay();
-        //     $weekDays = [];
-
-        //     for ($i = 0; $i < 7; $i++) {
-        //         $weekDays[] = $startOfWeek->addDay()->startOfDay()->copy();
-        //     }
-        // dd($weekDays);
+        
+        $search = $request->search;
         return Inertia::render('Reporte/Index', [
-            'reportes' => Reporte::with(['user','userAnular','maquina','productor','campo','tipo_cultivo','variedad'])->orderBy('id', 'desc')
-            ->whereHas('maquina', function($query) use ($request) {
-                $query->where('nombre', 'LIKE' , "%$request->search%");
-            })
-            ->OrwhereHas('productor', function($query) use ($request) {
-                $query->where('razon_social', 'LIKE' , "%$request->search%");
-            })
+            'reportes' => Reporte::with(['user','userAnular','maquina','productor','campo','tipo_cultivo','variedad'])
+            ->when($search, function ($query, $search) {
+                return $query->whereHas('maquina', function($query) use ($search) {
+                    $query->where('nombre', 'LIKE' , "%$search%");
+                })
+                ->OrWhereHas('productor', function($query) use ($search) {
+                    $query->where('razon_social', 'LIKE' , "%$search%");
+                });
+            })->orderBy('id', 'desc')
             ->simplePaginate(6),
             'weeks' => $weekDays,
             'lastReportToUser' => Reporte::where('user_id',auth()->user()->id)->orderBy('created_at', 'desc')->first(['id'])
@@ -252,6 +243,39 @@ class ReporteController extends Controller
             'fecha' => decrypt($date)
         ]);
         
+    }
+
+    public function createReportNA($date)
+    {
+
+        return Inertia::render('Reporte/Void',[
+            'fecha' => decrypt($date)
+        ]);
+        
+    }
+
+    public function storeReporteNA(Request $request)
+    {
+        
+        $validateUsersReport = Reporte::where('user_id',auth()->user()->id)->whereDate('fecha', $request->fecha)->count();
+        
+        if($validateUsersReport >= env('REPORT_DIARY_USER') && auth()->user()->isOperador()){
+            return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Solo puedes hacer 2 reportes diarios!');
+        }
+        
+        $request->validate([
+            'observacion' => 'required'
+        ]);
+
+        $request->merge(['user_id' => auth()->user()->id]);
+
+        $reporte = Reporte::create($request->all());
+        
+        if($reporte){
+            return redirect()->route('reporte.index')->with('message' , '¡Reporte Creado Exitosamente!');
+        }else{
+            return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
+        }
     }
 
     public function hAnterior($id){
