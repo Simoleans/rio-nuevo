@@ -9,6 +9,7 @@ use App\Models\Machine;
 use App\Models\Reporte;
 use App\Models\Variedad;
 use App\Models\Productor;
+use App\Models\Temporada;
 use App\Models\TipoCultivo;
 use Illuminate\Http\Request;
 use App\Exports\ReporteExport;
@@ -39,7 +40,7 @@ class ReporteController extends Controller
             }
 
         }
-        
+
         $search = $request->search;
         return Inertia::render('Reporte/Index', [
             'reportes' => Reporte::with(['user','userAnular','maquina','productor','campo','tipo_cultivo','variedad'])
@@ -181,11 +182,11 @@ class ReporteController extends Controller
         //
     }
 
-    public function excelExport()
+    public function excelExport(Temporada $temporada)
     {
-        $query = Reporte::active()->get();
+        $reporte = Reporte::dateBetween($temporada->fecha_inicio,$temporada->fecha_fin)->get();
 
-        return Excel::download(new ReporteExport($query), 'reportes'.date('dmyhs').'.xlsx');
+        return Excel::download(new ReporteExport($reporte,$temporada), 'reportes'.date('dmyhs').'.xlsx');
     }
 
     public function disabledReporte(Reporte $reporte)

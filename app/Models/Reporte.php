@@ -39,6 +39,10 @@ class Reporte extends Model
         return $query->where('maquina_id',$maquina)->where('user_id',auth()->user()->id);
     }
 
+    public function scopeDateBetween($query,$desde,$hasta){
+        return $query->whereBetween('fecha',[$desde,$hasta]);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class,'user_id');
@@ -75,7 +79,7 @@ class Reporte extends Model
 
     public function concatenadoLiquidacion()
     {
-        return  $this->productor.'-'.$this->maquina.'-'.$this->created_at->format('d-m-Y').'-'.$this->campo;
+        return  $this->productor->razon_social.'-'.$this->maquina->nombre.'-'.$this->created_at->format('d-m-Y').'-'.$this->campo->nombre;
     }
 
 }

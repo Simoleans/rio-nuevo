@@ -16,16 +16,19 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 class ReporteExport implements FromView, ShouldAutoSize, WithEvents,WithDrawings
 {
     protected $query;
+    protected $temporada;
 
-    public function __construct($query)
+    public function __construct($query,$temporada)
     {
         $this->query = $query;
+        $this->temporada = $temporada;
     }
     public function view(): View
     {
         
         return view('reporte.excel', [
-            'reportes' => $this->query
+            'reportes' => $this->query,
+            'temporada' => $this->temporada->nombre
 
         ]);
     }

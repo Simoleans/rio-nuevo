@@ -56,6 +56,9 @@
                                             <inertia-link v-show="temporada.status == 1" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('temporada.edit',temporada.id)">
                                                 Editar
                                             </inertia-link>
+                                            <a v-show="temporada.status == 0" class="text-blue-400 hover:text-blue-600 underline" :href="route('excelExport',temporada.id)">
+                                                Descargar reportes
+                                            </a>
                                             <a class="text-blue-400 hover:text-blue-600 underline m-2" href="#" @click="confirmDeleteData(temporada.id)">
                                                 Eliminar
                                             </a>
