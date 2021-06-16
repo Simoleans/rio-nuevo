@@ -17,7 +17,7 @@
                                 </div>
                                 <div class="flex flex-col flex-grow ml-4 items-center justify-center pt-2">
                                     <a @click="showOptions(w.encriptedDate)" class="cursor-pointer text-sm text-blue-800 font-extrabold text-md">Asignar Fecha</a>
-                                    <!-- <a v-else class="text-sm text-red-800 font-extrabold text-md">Fuera de Rango</a> -->
+                                    <a class="text-sm text-red-800 font-extrabold text-md">{{ w.totalKG }}</a>
                                     <div class="font-bold text-md">{{ w.dates }}</div>
                                 </div>
                             </div>
@@ -208,6 +208,9 @@
             reportes : Object,
             weeks : Object,
             lastReportToUser : String
+        },
+        created(){
+            console.log(this.weeks)
         },
         data() 
         {

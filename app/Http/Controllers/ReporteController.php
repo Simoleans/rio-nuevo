@@ -30,9 +30,11 @@ class ReporteController extends Controller
         $startOfWeek = $date->startOfWeek()->subDay();
 
         for ($i = 0; $i < 7; $i++) {
+            
             $weekDays[$i]['dates'] = $startOfWeek->addDay()->startOfDay()->copy()->format('Y-m-d');
             $weekDays[$i]['encriptedDate'] = encrypt($weekDays[$i]['dates']);
             $weekDays[$i]['dayName'] = $startOfWeek->locale('es')->dayName;
+            $weekDays[$i]['totalKG'] = Reporte::totalKGforDate($weekDays[$i]['dates']);
             if ($weekDays[$i]['dates'] == Carbon::now()->format('Y-m-d')) { //validar que sea hoy
                 $weekDays[$i]['todayValidation'] = true;
             }else{

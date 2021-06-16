@@ -34,6 +34,11 @@ class Reporte extends Model
         return $query->where('status',1);
     }
 
+    public function scopeTotalKGforDate($query,$fecha){
+        return $query->where('fecha',$fecha)->sum('kg_totales') == 0 ? 'N/T' : $query->where('fecha',$fecha)->sum('kg_totales').' KG';
+    }
+    
+
     public function scopeMaquinaByUser($query,$maquina){
 
         return $query->where('maquina_id',$maquina)->where('user_id',auth()->user()->id);
