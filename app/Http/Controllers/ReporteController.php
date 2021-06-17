@@ -78,8 +78,9 @@ class ReporteController extends Controller
         ]);
     }
 
-    public function cloneView(Reporte $reporte)
+    public function cloneView(Reporte $reporte,$fecha)
     {
+        
         if (!Gate::allows('clone-report', $reporte)) {
             return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡No tienes permisos de clonar este rpeorte!');
         }
@@ -91,6 +92,7 @@ class ReporteController extends Controller
             'variedad' => Variedad::where('tipo_cultivo_id',$reporte->tipo_cultivo_id)->orderBy('id', 'desc')->get(),
             'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get(),
             'reporte' => $reporte,
+            'fecha' => decrypt($fecha)
         ]);
     }
 

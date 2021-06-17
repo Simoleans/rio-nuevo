@@ -170,7 +170,7 @@
                 <a class="bg-blue-500 hover:bg-blue-600 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition" :href="route('createFechaReport',date)">
                     Crear Reporte
                 </a>
-                <a v-show="lastReport != 0" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.cloneView',lastReport)">
+                <a v-show="lastReport != 0" class="text-blue-400 hover:text-blue-600 underline m-2" :href="route('reporte.cloneView',{'reporte' : lastReport,'fecha' : date})">
                     Clonar
                 </a>
                 <a class="bg-green-500 hover:bg-green-600 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition" :href="route('createReportNA',date)">

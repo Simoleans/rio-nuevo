@@ -151,8 +151,8 @@
                     nro_bandeja : null,
                     hs_maquina : null,
                     observacion : null,
-                    fecha : props.reporte.fecha,
-                    fecha_mostrar : props.reporte.fecha,
+                    fecha : props.fecha,
+                    fecha_mostrar : props.fecha,
                     h_anterior : null
                 });
 
