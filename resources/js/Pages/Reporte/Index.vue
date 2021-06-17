@@ -16,13 +16,20 @@
                                     {{ w.dayName.toUpperCase() }}
                                 </div>
                                 <div class="flex flex-col flex-grow ml-4 items-center justify-center pt-2">
-                                    <a @click="showOptions(w.encriptedDate)" class="cursor-pointer text-sm text-blue-800 font-extrabold text-md">Asignar Fecha</a>
+                                    <a @click="showOptions(w.encriptedDate,w.dff)" class="cursor-pointer text-sm text-blue-800 font-extrabold text-md">Asignar Fecha</a>
                                     <a class="text-sm text-red-800 font-extrabold text-md">{{ w.totalKG }}</a>
                                     <div class="font-bold text-md">{{ w.dates }}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div v-show="validationMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-3" role="alert">
+                    <strong class="font-bold">Alerta!</strong>
+                    <span class="block sm:inline">Hay días anteriores a esté que aun no se han registrado reportes.</span>
+                    <span @click="closevalidationMessage" class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                        <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                    </span>
                 </div>
                 <div class="md:grid md:grid-cols-4 md:gap-6">
                     <div class="md:col-span-1">
@@ -34,14 +41,6 @@
                         <div class="shadow bg-white md:rounded-md p-4">
                             <div class="flex justify-between items-center gap-6">
                                 <input type="text" class="form-input rounded-md shadow-md p-2 m-1 md:w-1/3 lg:w-1/3" placeholder="Buscar por Productor | Maquina" v-model="search">
-                                <!-- <div class="flex flex-col md:flex-row lg:flex-row justify-between items-center gap-3">
-                                    <a v-if="reportes.data.length > 0 && $page.props.user.admin" class="text-blue-400 hover:text-blue-600 underline" :href="route('excelExport')">
-                                        Descargar
-                                    </a>
-                                    <inertia-link :href="route('reporte.create')" class="bg-blue-500 hover:bg-blue-700 p-3 rounded font-bold text-white">
-                                        Crear Reporte
-                                    </inertia-link>
-                                </div> -->
                             </div>
                             <hr class="my-6">
                             <table class="border-collapse w-full">
@@ -209,9 +208,6 @@
             weeks : Object,
             lastReportToUser : String
         },
-        created(){
-            console.log(this.weeks)
-        },
         data() 
         {
             return {
@@ -222,6 +218,7 @@
                 showModalData : false,
                 showModalOptions : false,
                 date: null,
+                validationMessage : false,
                 lastReport : this.lastReportToUser != null ? this.lastReportToUser.id : 0
             }
         },
@@ -234,6 +231,9 @@
 
             },
 
+            closevalidationMessage(){
+                this.validationMessage = false;
+            },
             createReport(d){
                 Inertia.get(route('createFechaReport',d));
             },
@@ -249,9 +249,14 @@
                 this.showModalOptions = false;
                 this.date = null;
             },
-            showOptions(date){
-                this.showModalOptions = true;
-                this.date = date;
+            showOptions(date,validation){
+                if(validation){
+                    this.showModalOptions = true;
+                    this.date = date;
+                    this.validationMessage = false;
+                }else{
+                    this.validationMessage = true;
+                }
             },
             deletereporte(){
                 Inertia.delete(this.route('reporte.destroy' , this.id), {

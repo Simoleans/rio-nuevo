@@ -15,7 +15,6 @@ use Illuminate\Http\Request;
 use App\Exports\ReporteExport;
 use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Validator;
 
 class ReporteController extends Controller
 {
@@ -34,6 +33,14 @@ class ReporteController extends Controller
             $weekDays[$i]['dates'] = $startOfWeek->addDay()->startOfDay()->copy()->format('Y-m-d');
             $weekDays[$i]['encriptedDate'] = encrypt($weekDays[$i]['dates']);
             $weekDays[$i]['dayName'] = $startOfWeek->locale('es')->dayName;
+            if($i == 0){
+                $weekDays[$i]['dff'] = true;
+            }else{
+                $weekDays[$i]['dff'] = Reporte::where('user_id',auth()->user()->id)->where('fecha', Carbon::parse($weekDays[$i]['dates'])->subDay()->format('Y-m-d'))->orWhere('fecha',$weekDays[$i]['dates'])->exists();
+            }
+            // if ($weekDays[$i]['dates'] == Carbon::now()->format('Y-m-d')) { //validar que sea hoy
+            //     $weekDays[$i]['dff'] = Carbon::parse($weekDays[$i]['dates'])->addDay()->format('Y-m-d');
+            // }
             $weekDays[$i]['totalKG'] = Reporte::totalKGforDate($weekDays[$i]['dates']);
             if ($weekDays[$i]['dates'] == Carbon::now()->format('Y-m-d')) { //validar que sea hoy
                 $weekDays[$i]['todayValidation'] = true;
@@ -42,6 +49,12 @@ class ReporteController extends Controller
             }
 
         }
+
+        for ($i=0; $i < 7; $i++) { 
+            $val[] = $weekDays[$i]['dates'];
+        }
+
+        // dd($val,$weekDays);
 
         $search = $request->search;
         return Inertia::render('Reporte/Index', [
@@ -67,7 +80,6 @@ class ReporteController extends Controller
      */
     public function create()
     {
-        
 
         return Inertia::render('Reporte/Create',[
             'productor' => Productor::orderBy('id', 'desc')->get(),
@@ -110,6 +122,14 @@ class ReporteController extends Controller
         if($validateUsersReport >= env('REPORT_DIARY_USER') && auth()->user()->isOperador()){
             return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Solo puedes hacer 2 reportes diarios!');
         }
+
+        $date = Carbon::now(); // todos los días de la semana.
+        $startOfWeek = $date->startOfWeek()->subDay();
+
+        for ($i = 0; $i < 7; $i++) {
+            $weekDays[$i]['dates'] = $startOfWeek->addDay()->startOfDay()->copy()->format('Y-m-d');
+        }
+
         
         $request->validate([
             'productor_id' => 'required',
