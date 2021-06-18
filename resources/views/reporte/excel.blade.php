@@ -24,12 +24,13 @@
         <th>KILOS TEÓRICOS</th>
         <th>HORAS</th>
         <th>HORAS DELTA</th>
+        <th>OBSERVACIÓN</th>
         <th>FACTURA ARRIENDO</th>
         <th>STATUS ARRIENDO</th>
         <th>COMPLETO</th>
         <th>N. FACTURA</th>
         <th>STATUS FACTURA</th>
-        <th>OBSERVACIÓN</th>
+        
     </tr>
     </thead>
     <tbody>
@@ -54,6 +55,7 @@
             <td>{{ $r->hs_maquina ?? 0 }}</td>
             <td>{{ $r->horas_delta }}</td>
             <td>{{ $r->observacion }}</td>
+            
         </tr>
     @endforeach
     </tbody>

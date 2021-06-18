@@ -40,9 +40,9 @@ class ReporteExport implements FromView, ShouldAutoSize, WithEvents,WithDrawings
 
                 $c = count($this->query) + 6;
                 
-                $cellRange = 'A6:V'.$c;
-                $cellRangeAll = 'A6:Q6'; // header table estacion
-                $cellRed = 'R6:V6';
+                $cellRange = 'A6:X'.$c;
+                $cellRangeAll = 'A6:S6'; // header table
+                $cellRed = 'T6:X6';
 
                 $styleArrayAll = [ //encabezado
                     'font'      => [
