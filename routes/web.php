@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CampoController;
 use App\Http\Controllers\FaenaController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MachineController;
 use App\Http\Controllers\VariedadController;
 use App\Http\Controllers\ProductorController;
@@ -49,6 +50,7 @@ Route::middleware(['auth:sanctum','user-inactive'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum','user-inactive','admin'])->group(function () {
+    Route::get('/dashboard',[HomeController::class , 'dashboard' ])->name('dashboard');
     Route::resource('/machine',MachineController::class);
     Route::put('/machine/enable/{machine}',[MachineController::class,'enable'])->name('machine.enable');
     Route::resource('/productors',ProductorController::class);
@@ -62,6 +64,6 @@ Route::middleware(['auth:sanctum','user-inactive','admin'])->group(function () {
     Route::put('/finishTemporada/{temporada}',[TemporadaController::class,'finishTemporada'])->name('finishTemporada');
 });
 
-Route::middleware(['auth:sanctum', 'verified','user-inactive'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');
+// Route::middleware(['auth:sanctum', 'verified','user-inactive'])->get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->name('dashboard');

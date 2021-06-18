@@ -25,37 +25,6 @@ class ReporteController extends Controller
      */
     public function index(Request $request)
     {
-        $date = Carbon::now(); // todos los días de la semana.
-        $startOfWeek = $date->startOfWeek()->subDay();
-
-        for ($i = 0; $i < 7; $i++) {
-            
-            $weekDays[$i]['dates'] = $startOfWeek->addDay()->startOfDay()->copy()->format('Y-m-d');
-            $weekDays[$i]['encriptedDate'] = encrypt($weekDays[$i]['dates']);
-            $weekDays[$i]['dayName'] = $startOfWeek->locale('es')->dayName;
-            if($i == 0){
-                $weekDays[$i]['dff'] = true;
-            }else{
-                $weekDays[$i]['dff'] = Reporte::where('user_id',auth()->user()->id)->where('fecha', Carbon::parse($weekDays[$i]['dates'])->subDay()->format('Y-m-d'))->orWhere('fecha',$weekDays[$i]['dates'])->exists();
-            }
-            // if ($weekDays[$i]['dates'] == Carbon::now()->format('Y-m-d')) { //validar que sea hoy
-            //     $weekDays[$i]['dff'] = Carbon::parse($weekDays[$i]['dates'])->addDay()->format('Y-m-d');
-            // }
-            $weekDays[$i]['totalKG'] = Reporte::totalKGforDate($weekDays[$i]['dates']);
-            if ($weekDays[$i]['dates'] == Carbon::now()->format('Y-m-d')) { //validar que sea hoy
-                $weekDays[$i]['todayValidation'] = true;
-            }else{
-                $weekDays[$i]['todayValidation'] = false;
-            }
-
-        }
-
-        for ($i=0; $i < 7; $i++) { 
-            $val[] = $weekDays[$i]['dates'];
-        }
-
-        // dd($val,$weekDays);
-
         $search = $request->search;
         return Inertia::render('Reporte/Index', [
             'reportes' => Reporte::with(['user','userAnular','maquina','productor','campo','tipo_cultivo','variedad'])
@@ -66,10 +35,9 @@ class ReporteController extends Controller
                 ->OrWhereHas('productor', function($query) use ($search) {
                     $query->where('razon_social', 'LIKE' , "%$search%");
                 });
-            })->orderBy('id', 'desc')
+            })->user(auth()->user()->rol)->orderBy('id', 'desc')
             ->simplePaginate(6),
-            'weeks' => $weekDays,
-            'lastReportToUser' => Reporte::where('user_id',auth()->user()->id)->orderBy('created_at', 'desc')->first(['id'])
+            
         ]);
     }
 

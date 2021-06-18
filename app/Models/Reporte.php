@@ -48,6 +48,12 @@ class Reporte extends Model
         return $query->whereBetween('fecha',[$desde,$hasta]);
     }
 
+    public function scopeUser($query,$rol){
+        if ($rol == 'operador') {
+            $query->where('user_id',auth()->user()->id);
+        }
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class,'user_id');
