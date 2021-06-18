@@ -7,6 +7,7 @@
         <tr></tr>
     <tr>
         <th>TEMPORADA</th>
+        <th>CREACIÓN</th>
         <th>SEMANA</th>
         <th>FECHA</th>
         <th>MAQUINA</th>
@@ -28,12 +29,14 @@
         <th>COMPLETO</th>
         <th>N. FACTURA</th>
         <th>STATUS FACTURA</th>
+        <th>OBSERVACIÓN</th>
     </tr>
     </thead>
     <tbody>
     @foreach($reportes as $r)
         <tr>
             <td>{{  $temporada }}</td>
+            <td>{{  $r->modo_creacion == 1 ? 'Creado' : 'N/A' }}</td>
             <td>{{ $r->created_at->weekOfYear }}</td>
             <td>{{ $r->created_at->format('d-m-Y') }}</td>
             <td>{{ $r->maquina->nombre }}</td>
@@ -50,6 +53,7 @@
             <td>{{ $r->kg_teoricos }}</td>
             <td>{{ $r->hs_maquina ?? 0 }}</td>
             <td>{{ $r->horas_delta }}</td>
+            <td>{{ $r->observacion }}</td>
         </tr>
     @endforeach
     </tbody>

@@ -292,7 +292,7 @@ class ReporteController extends Controller
             'observacion' => 'required'
         ]);
 
-        $request->merge(['user_id' => auth()->user()->id]);
+        $request->merge(['user_id' => auth()->user()->id,'modo_creacion' => 0]);
 
         $reporte = Reporte::create($request->all());
         
