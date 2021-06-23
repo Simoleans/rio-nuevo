@@ -16,7 +16,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user()->isOperador())
+        if(auth()->user()->rol == 'operador')
         {
             return redirect()->route('loginView')->withErrors('No puedes entrar, no tienes permisos.');
 

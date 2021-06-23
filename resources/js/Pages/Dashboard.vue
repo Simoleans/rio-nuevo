@@ -17,7 +17,7 @@
                                         {{ w.dayName.toUpperCase() }}
                                     </div>
                                     <div class="flex flex-col flex-grow ml-4 items-center justify-center pt-2">
-                                        <a @click="showOptions(w.encriptedDate,w.dff)" class="cursor-pointer text-sm text-blue-800 font-extrabold text-md">Asignar Fecha</a>
+                                        <a @click="showOptions(w.encriptedDate,w.dff)" class="cursor-pointer text-sm text-blue-800 font-extrabold text-md">Crear Reporte</a>
                                         <a class="text-sm text-red-800 font-extrabold text-md">{{ w.totalKG }}</a>
                                         <div class="font-bold text-md">{{ w.dates }}</div>
                                     </div>

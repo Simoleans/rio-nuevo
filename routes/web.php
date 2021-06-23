@@ -35,6 +35,7 @@ Route::get('/', function () {
 })->name('loginView');
 
 Route::middleware(['auth:sanctum','user-inactive'])->group(function () {
+    Route::get('/dashboard',[HomeController::class , 'dashboard' ])->name('dashboard');
     Route::resource('/reporte',ReporteController::class)->except(['create']);
     Route::get('/reporte/excel/export/{temporada}',[ReporteController::class,'excelExport'])->name('excelExport');
     Route::put('/finalizarReporte/{reporte}',[ReporteController::class,'disabledReporte'])->name('disabledReporte');
@@ -50,7 +51,6 @@ Route::middleware(['auth:sanctum','user-inactive'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum','user-inactive','admin'])->group(function () {
-    Route::get('/dashboard',[HomeController::class , 'dashboard' ])->name('dashboard');
     Route::resource('/machine',MachineController::class);
     Route::put('/machine/enable/{machine}',[MachineController::class,'enable'])->name('machine.enable');
     Route::resource('/productors',ProductorController::class);
