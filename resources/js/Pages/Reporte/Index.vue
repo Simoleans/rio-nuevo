@@ -25,7 +25,6 @@
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Productor</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Maquina</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Campo</th>
-                                        <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">T. Bandeja</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Fecha</th>
                                         <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Estatus</th>
                                     </tr>
@@ -43,10 +42,6 @@
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Campo</span>
                                             {{ reporte.campo.nombre }}
-                                        </td>
-                                        <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
-                                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">T. Bandeja</span>
-                                            {{ reporte.tipo_bandeja }}
                                         </td>
                                         <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Fecha</span>
@@ -98,8 +93,9 @@
                         <p>Campo:</p><strong>{{ modal.campo.nombre }}</strong>
                         <p>Variedad:</p><strong>{{ modal.variedad.nombre }}</strong>
                         <p>T. Cultivo:</p><strong>{{ modal.tipo_cultivo.nombre }}</strong>
-                        <p>T. Bandeja:</p><strong>{{ modal.tipo_bandeja }}</strong>
-                        <p>Nro. Bandeja:</p><strong>{{ modal.nro_bandeja }}</strong>
+                        <p>T. Bandeja 3.5:</p><strong>{{ modal.tipo_bandeja35 }}</strong>
+                        <p>T. Bandeja 7:</p><strong>{{ modal.tipo_bandeja7 }}</strong>
+                        <p>T. Bandeja 14:</p><strong>{{ modal.tipo_bandeja14 }}</strong>
                     </div>
                     <div class="flex flex-col gap-2">
                         <p>Kg Totales:</p><strong>{{ modal.kg_totales }}</strong>

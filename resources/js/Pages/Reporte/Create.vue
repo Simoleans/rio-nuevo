@@ -38,20 +38,22 @@
                                         <Select2 required v-model="form.variedad_id" :options="variedadOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
                                         <jet-input-error :message="errors.variedad_id" class="mt-2" />
                                     </div>
-                                    <div>
-                                        <jet-label for="tipo_bandeja" value="T. Bandeja (*)" />
-                                        <select :class="{ ' border border-red-500' : errors.tipo_bandeja }" class="border-gray-300 w-full focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1" v-model="form.tipo_bandeja">
-                                            <option value="">Seleccione...</option>
-                                            <option v-for="option in tipo_bandejaOpt" :value="option.id" :key="option.id">
-                                                {{ option.text }}
-                                            </option>
-                                        </select>
-                                        <jet-input-error :message="errors.tipo_bandeja" class="mt-2" />
-                                    </div>
-                                    <div>
-                                        <jet-label for="nro_bandeja" value="Nro . Bandejas (*)" />
-                                        <jet-input required id="nro_bandeja" type="number" :errors="errors.nro_bandeja" class="mt-1 block w-full" v-model="form.nro_bandeja"/>
-                                        <jet-input-error :message="errors.nro_bandeja" class="mt-2" />
+                                    <div class="grid grid-cols-3 col-span-2 gap-3">
+                                        <div>
+                                            <jet-label for="tipo_bandeja35" value="T. Bandeja de 3.5 (*)" />
+                                            <jet-input required id="tipo_bandeja35" type="number" :errors="errors.tipo_bandeja35" class="mt-1 block w-full" v-model="tipo.tipo_bandeja35"/>
+                                            <jet-input-error :message="errors.tipo_bandeja35" class="mt-2" />
+                                        </div>
+                                        <div>
+                                            <jet-label for="tipo_bandeja7" value="T. Bandeja de 7 (*)" />
+                                            <jet-input required id="tipo_bandeja7" type="number" :errors="errors.tipo_bandeja7" class="mt-1 block w-full" v-model="tipo.tipo_bandeja7"/>
+                                            <jet-input-error :message="errors.tipo_bandeja7" class="mt-2" />
+                                        </div>
+                                        <div>
+                                            <jet-label for="tipo_bandeja14" value="T. Bandeja de 14(*)" />
+                                            <jet-input required id="tipo_bandeja14" type="number" :errors="errors.tipo_bandeja14" class="mt-1 block w-full" v-model="tipo.tipo_bandeja14"/>
+                                            <jet-input-error :message="errors.tipo_bandeja14" class="mt-2" />
+                                        </div>
                                     </div>
                                     <div>
                                         <jet-label for="kg_totales" value="Kgs. Totales (*)" />
@@ -145,10 +147,8 @@
                     campo_id: null,
                     productor_id: null,
                     tipo_cultivo_id: null,
-                    tipo_bandeja : null,
                     kg_totales : null,
                     kg_teoricos : null,
-                    nro_bandeja : null,
                     hs_maquina : null,
                     observacion : null,
                     fecha : props.fecha,
@@ -156,6 +156,12 @@
                     h_anterior : null
                 });
 
+                const tipo =  ref({
+                    tipo_bandeja35 : null,
+                    tipo_bandeja7 : null,
+                    tipo_bandeja14 : null,
+                    
+                });
 
                 const productorOpt = [];
                 const campoOpt = ref([]);
@@ -163,25 +169,13 @@
                 const variedadOpt = ref([]);
                 const tipo_cultivoOpt = [];
 
-                const tipo_bandejaOpt = [{
-                    'id' : 3.5,
-                    'text' : 3.5
-                },
-                {
-                    'id' : 7,
-                    'text' : 7
-                },
-                {
-                    'id' : 14,
-                    'text' : 14
-                }]
-
                 const copyKgTeorico = () => {
                     form.value.kg_totales = form.value.kg_teoricos;
                 }
 
-                watch(form.value, (v) => {
-                    v.kg_teoricos = v.nro_bandeja * v.tipo_bandeja;
+                watch(tipo.value, (v) => {
+                    form.value.kg_teoricos = (v.tipo_bandeja35 * 3.5) + (v.tipo_bandeja7 * 7) + (v.tipo_bandeja14 * 14);
+                    
                 });
 
                 watch(
@@ -241,7 +235,7 @@
                     if(form.value.h_anterior > form.value.hs_maquina){
                         props.errors.h_anterior = 'Las horas debe ser mayor a la hora anterior.';
                     }else{
-                        Inertia.post('/reporte', {...form.value})
+                        Inertia.post('/reporte', {...form.value,...tipo.value})
                     }
                         
                 }
@@ -257,7 +251,7 @@
                 //     });
                 // }
 
-                return {form,storeData,productorOpt,campoOpt,maquinaOpt,variedadOpt,tipo_cultivoOpt,tipo_bandejaOpt,copyKgTeorico}
+                return {form,storeData,productorOpt,campoOpt,maquinaOpt,variedadOpt,tipo_cultivoOpt,copyKgTeorico,tipo}
         }
     }
 

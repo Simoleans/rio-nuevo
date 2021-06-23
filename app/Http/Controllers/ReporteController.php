@@ -105,8 +105,6 @@ class ReporteController extends Controller
             'maquina_id' => 'required',
             'tipo_cultivo_id' => 'required',
             'variedad_id' => 'required',
-            'tipo_bandeja' => 'required',
-            'nro_bandeja' => 'required',
             'kg_totales' => 'required',
             'kg_teoricos' => 'required',
             'fecha' => 'required',
