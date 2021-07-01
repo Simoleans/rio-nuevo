@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Reporte;
 use Illuminate\Http\Request;
@@ -30,13 +31,39 @@ class HomeController extends Controller
             }else{
                 $weekDays[$i]['todayValidation'] = false;
             }
-
         }
-        
+        $fecha = [];
+        for ($i=0; $i < 7; $i++) { 
+            $fecha[] = $weekDays[$i]['dates'];
+        }
+        // dd(Reporte::whereIn('fecha',$fecha)->get()); // todas los reportes de la semana
+
+
+        $operadores = User::operadoresActivos()->get();
+
+        $allData = $operadores->map(function($v) use ($weekDays) {
+            foreach($weekDays as $value => $k){
+                $d[$value] = $v->reportesCountToWeek($k['dates']) == 0 ? 'N/T' : $v->reportesCountToWeek($k['dates']);
+            }
+
+
+            return [
+                'operador' => $v->name,
+                'reportes' => $d
+            ];
+            // return [
+            //     'operador' => $v->name,
+            //     'reportes' => [
+            //         'lunes' => '2'
+            //     ]
+            // ];
+        });
+        // dd($allData);
 
         return Inertia::render('Dashboard',[
             'weeks' => $weekDays,
-            'lastReportToUser' => Reporte::where('user_id',auth()->user()->id)->orderBy('created_at', 'desc')->first(['id'])
+            'lastReportToUser' => Reporte::where('user_id',auth()->user()->id)->orderBy('created_at', 'desc')->first(['id']),
+            'operadores' => $allData
         ]);
     }
 }

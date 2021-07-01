@@ -71,6 +71,14 @@ class User extends Authenticatable
         return $this->hasMany(Productor::class,);
     }
 
+    public function reportes(){
+        return $this->hasMany(Reporte::class);
+    }
+
+    public function reportesTotal(){
+        return $this->reportes()->count();
+    }
+
     public function isAdmin(){
 
         return $this->rol == 'admin';
@@ -79,6 +87,11 @@ class User extends Authenticatable
     public function isOperador(){
 
         return $this->rol == 'operador';
+    }
+
+    public function reportesCountToWeek($fecha)
+    {
+        return $this->reportes()->where('fecha',$fecha)->count();
     }
 
     public function scopeActive($query){
@@ -94,5 +107,9 @@ class User extends Authenticatable
     public function scopeInactive($query){
         
         return $query->where('status',0);
+    }
+
+    public function scopeOperadoresActivos($query){
+        return $query->where('rol','operador')->active();
     }
 }
