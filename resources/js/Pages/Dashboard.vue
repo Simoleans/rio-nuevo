@@ -104,9 +104,6 @@
             lastReportToUser : String,
             operadores : Object
         },
-        created(){
-            console.log(this.operadores)
-        },
         data(){
             return {
                 showModalOptions : false,
