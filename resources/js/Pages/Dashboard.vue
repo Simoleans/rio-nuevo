@@ -8,7 +8,10 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="mb-4 w-full">
+                <inertia-link v-if="$page.props.user.admin" class="text-blue-400 hover:text-blue-600 underline" :href="route('reporte.admin')">
+                    Crear REPORTE con fecha anterior
+                </inertia-link>
+                <div class="mb-4 w-full mt-3">
                         <div class="grid grid-cols-2 md:grid-cols-7 lg:grid-cols-7 gap-2">
                             <div v-for="(w,i) in weeks" :key="i" class="col-span-2 md:col-span-1 hover:shadow-lg">
                                 <div class="flex flex-col bg-gray-300 shadow-sm rounded p-4 " :class="{

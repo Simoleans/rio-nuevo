@@ -36,8 +36,6 @@ class HomeController extends Controller
         for ($i=0; $i < 7; $i++) { 
             $fecha[] = $weekDays[$i]['dates'];
         }
-        // dd(Reporte::whereIn('fecha',$fecha)->get()); // todas los reportes de la semana
-
 
         $operadores = User::operadoresActivos()->get();
 
@@ -51,14 +49,7 @@ class HomeController extends Controller
                 'operador' => $v->name,
                 'reportes' => $d
             ];
-            // return [
-            //     'operador' => $v->name,
-            //     'reportes' => [
-            //         'lunes' => '2'
-            //     ]
-            // ];
         });
-        // dd($allData);
 
         return Inertia::render('Dashboard',[
             'weeks' => $weekDays,

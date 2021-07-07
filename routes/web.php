@@ -62,6 +62,8 @@ Route::middleware(['auth:sanctum','user-inactive','admin'])->group(function () {
     // Route::put('/finalizarFaena/{faena}',[FaenaController::class,'disabledFaena'])->name('disabledFaena');
     Route::resource('/temporada',TemporadaController::class);
     Route::put('/finishTemporada/{temporada}',[TemporadaController::class,'finishTemporada'])->name('finishTemporada');
+    Route::get('/reporte/crear/admin',[ReporteController::class,'adminCreate'])->name('reporte.admin');
+    Route::post('/report/storeAdmin',[ReporteController::class,'storeAdmin'])->name('storeAdmin');
 });
 
 // Route::middleware(['auth:sanctum', 'verified','user-inactive'])->get('/dashboard', function () {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Campo;
 use App\Models\Machine;
@@ -74,6 +75,58 @@ class ReporteController extends Controller
             'reporte' => $reporte,
             'fecha' => decrypt($fecha)
         ]);
+    }
+
+    public function adminCreate()
+    {
+        return Inertia::render('Reporte/CreateAdmin',[
+            'productor' => Productor::orderBy('id', 'desc')->get(),
+            'campo' => Campo::orderBy('id', 'desc')->get(),
+            'maquina' => Machine::orderBy('id', 'desc')->active()->get(),
+            'variedad' => Variedad::orderBy('id', 'desc')->get(),
+            'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get(),
+            'users' => User::orderBy('id', 'desc')
+            ->where('id','!=',auth()->user()->id)
+            ->active()->get()
+        ]);
+    }
+
+    public function storeAdmin(Request $request)
+    {
+        
+        $validateUsersReport = Reporte::where('user_id',$request->user_id)->whereDate('fecha', $request->fecha)->count();
+        
+        if($validateUsersReport >= env('REPORT_DIARY_USER')){
+            return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Solo puedes hacer 2 reportes diarios!');
+        }
+        
+        $request->validate([
+            'productor_id' => 'required',
+            'campo_id' => 'required',
+            'maquina_id' => 'required',
+            'tipo_cultivo_id' => 'required',
+            'variedad_id' => 'required',
+            'kg_totales' => 'required',
+            'kg_teoricos' => 'required',
+            'fecha' => 'required',
+            'h_anterior' => 'required',
+            'user_id' => 'required'
+        ]);
+
+        $query = Reporte::latest()->first();
+
+        $hsAfter = $query->hs_maquina ?? 0;
+        
+
+        $request->merge(['user_id' => $request->user_id,'horas_delta' => $hsAfter - $request->hs_maquina]);
+
+        $reporte = Reporte::create($request->all());
+        
+        if($reporte){
+            return redirect()->route('reporte.index')->with('message' , '¡Reporte Creado Exitosamente!');
+        }else{
+            return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
+        }
     }
 
     /**
