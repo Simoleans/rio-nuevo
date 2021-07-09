@@ -41,7 +41,7 @@ class HomeController extends Controller
 
         $allData = $operadores->map(function($v) use ($weekDays) {
             foreach($weekDays as $value => $k){
-                $d[$value] = $v->reportesCountToWeek($k['dates']) == 0 ? 'N/T' : $v->machineToReportDay($k['dates']);
+                $d[$value] = $v->reportesCountToWeek($k['dates']) == 0 ? 'No cosecho' : $v->machineToReportDay($k['dates']);
             }
 
 
