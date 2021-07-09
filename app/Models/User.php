@@ -94,6 +94,16 @@ class User extends Authenticatable
         return $this->reportes()->where('fecha',$fecha)->count();
     }
 
+    public function machineToReportDay($fecha)
+    {
+        $data = [];
+        foreach($this->reportes()->where('fecha',$fecha)->get() as $r){
+            $data [] = $r->maquina->nombre;
+        }
+
+        return $data;
+    }
+
     public function scopeActive($query){
 
         return $query->where('status',1);
