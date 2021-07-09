@@ -37,9 +37,9 @@ class Reporte extends Model
 
     public function scopeTotalKGforDate($query,$fecha){
         if(auth()->user()->rol === 'admin'){
-            return $query->where('fecha',$fecha)->sum('kg_totales') == 0 ? 'N/T' : $query->where('fecha',$fecha)->sum('kg_totales').' KG';
+            return $query->where('fecha',$fecha)->sum('kg_totales') == 0 ? 'No cosecho' : $query->where('fecha',$fecha)->sum('kg_totales').' KG';
         }else{
-            return $query->where('fecha',$fecha)->where('user_id',auth()->user()->id)->sum('kg_totales') == 0 ? 'N/T' : $query->where('fecha',$fecha)->where('user_id',auth()->user()->id)->sum('kg_totales').' KG';
+            return $query->where('fecha',$fecha)->where('user_id',auth()->user()->id)->sum('kg_totales') == 0 ? 'No cosecho' : $query->where('fecha',$fecha)->where('user_id',auth()->user()->id)->sum('kg_totales').' KG';
         }
     }
     

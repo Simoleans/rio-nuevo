@@ -96,9 +96,9 @@ class User extends Authenticatable
 
     public function machineToReportDay($fecha)
     {
-        $data = [];
+        $data = '';
         foreach($this->reportes()->where('fecha',$fecha)->get() as $r){
-            $data [] = $r->maquina->nombre.' | '.$r->kg_totales.' Kg';
+            $data  .= '- '.$r->maquina->nombre.' | '.$r->kg_totales.' Kg <br>';
         }
 
         return $data;
