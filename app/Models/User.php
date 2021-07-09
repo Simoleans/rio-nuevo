@@ -98,7 +98,7 @@ class User extends Authenticatable
     {
         $data = [];
         foreach($this->reportes()->where('fecha',$fecha)->get() as $r){
-            $data [] = $r->maquina->nombre.' | '.$r->kg_totales;
+            $data [] = $r->maquina->nombre.' | '.$r->kg_totales.' Kg';
         }
 
         return $data;

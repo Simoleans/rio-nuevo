@@ -56,8 +56,9 @@
                                     {{ operador.operador }}
                                 </td>
                                 <td v-for="(r,j) in operador.reportes" :key="j" class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
-                                    <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Lunes</span>
-                                    <span class="text-md font-bold" v-for="(m,u) in r" :key="u">{{ m }}<br></span>
+                                    <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Maquinas</span>
+                                    <pre> {{ r }} </pre>
+                                    
                                 </td>
                             </tr>
                         </tbody>
