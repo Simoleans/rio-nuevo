@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Machine;
 use Carbon\Carbon;
 use App\Models\User;
 use Inertia\Inertia;
@@ -37,16 +38,30 @@ class HomeController extends Controller
             $fecha[] = $weekDays[$i]['dates'];
         }
 
-        $operadores = User::operadoresActivos()->get();
+        // $operadores = User::operadoresActivos()->get();
 
-        $allData = $operadores->map(function($v) use ($weekDays) {
+        // $allData = $operadores->map(function($v) use ($weekDays) {
+        //     foreach($weekDays as $value => $k){
+        //         $d[$value] = $v->reportesCountToWeek($k['dates']) == 0 ? 'No cosecho' : $v->machineToReportDay($k['dates']);
+        //     }
+
+
+        //     return [
+        //         'operador' => $v->name,
+        //         'reportes' => $d
+        //     ];
+        // });
+
+        $machines = Machine::active()->get();
+
+
+        $allData = $machines->map(function($v) use ($weekDays) {
             foreach($weekDays as $value => $k){
                 $d[$value] = $v->reportesCountToWeek($k['dates']) == 0 ? 'No cosecho' : $v->machineToReportDay($k['dates']);
             }
 
-
             return [
-                'operador' => $v->name,
+                'operador' => $v->nombre,
                 'reportes' => $d
             ];
         });

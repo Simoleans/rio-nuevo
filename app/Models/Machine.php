@@ -21,9 +21,28 @@ class Machine extends Model
         return $this->hasOne(User::class,);
     }
 
+    public function reportes(){
+        return $this->hasMany(Reporte::class,'maquina_id');
+    }
+
     public function temporada()
     {
         return $this->belongsTo(Temporada::class,)->withDefault(['nombre' => 'N/T']);
+    }
+
+    public function machineToReportDay($fecha)
+    {
+        $data = '';
+        foreach($this->reportes()->where('fecha',$fecha)->get() as $r){
+            $data  .= $r->kg_totales === NULL ? '0' : $r->kg_totales.' Kg <br>';
+        }
+
+        return $data;
+    }
+
+    public function reportesCountToWeek($fecha)
+    {
+        return $this->reportes()->where('fecha',$fecha)->count();
     }
 
     public function scopeActive($query){

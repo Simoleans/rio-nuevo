@@ -96,7 +96,7 @@ class ReporteController extends Controller
         
         $validateUsersReport = Reporte::where('user_id',$request->user_id)->whereDate('fecha', $request->fecha)->count();
         
-        if($validateUsersReport >= env('REPORT_DIARY_USER')){
+        if($validateUsersReport >= 2){
             return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Solo puedes hacer 2 reportes diarios!');
         }
         
@@ -140,7 +140,7 @@ class ReporteController extends Controller
         
         $validateUsersReport = Reporte::where('user_id',auth()->user()->id)->whereDate('fecha', $request->fecha)->count();
         
-        if($validateUsersReport >= env('REPORT_DIARY_USER') && auth()->user()->isOperador()){
+        if($validateUsersReport >= 2 && auth()->user()->isOperador()){
             return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Solo puedes hacer 2 reportes diarios!');
         }
 
@@ -199,7 +199,14 @@ class ReporteController extends Controller
      */
     public function edit(Reporte $reporte)
     {
-        //
+        return Inertia::render('Reporte/Edit',[
+            'reporte' => $reporte,
+            'productor' => Productor::orderBy('id', 'desc')->get(),
+            'campo' => Campo::where('productor_id',$reporte->productor_id)->orderBy('id', 'desc')->get(),
+            'maquina' => Machine::orderBy('id', 'desc')->active()->get(),
+            'variedad' => Variedad::where('tipo_cultivo_id',$reporte->tipo_cultivo_id)->orderBy('id', 'desc')->get(),
+            'tipo_cultivo' => TipoCultivo::orderBy('id', 'desc')->get(),
+        ]);
     }
 
     /**
@@ -211,7 +218,41 @@ class ReporteController extends Controller
      */
     public function update(Request $request, Reporte $reporte)
     {
-        //
+
+        $date = Carbon::now(); // todos los días de la semana.
+        $startOfWeek = $date->startOfWeek()->subDay();
+
+        for ($i = 0; $i < 7; $i++) {
+            $weekDays[$i]['dates'] = $startOfWeek->addDay()->startOfDay()->copy()->format('Y-m-d');
+        }
+
+        
+        $request->validate([
+            'productor_id' => 'required',
+            'campo_id' => 'required',
+            'maquina_id' => 'required',
+            'tipo_cultivo_id' => 'required',
+            'variedad_id' => 'required',
+            'kg_totales' => 'required',
+            'kg_teoricos' => 'required',
+            'fecha' => 'required',
+            'h_anterior' => 'required'
+        ]);
+
+        // $query = Reporte::latest()->first();
+
+        // $hsAfter = $query->hs_maquina ?? 0;
+        
+
+        $request->merge(['user_id' => auth()->user()->id]);
+
+        $upd = $reporte->update($request->all());
+        
+        if($upd){
+            return redirect()->route('reporte.index')->with('message' , '¡Reporte Editado Correctamente!');
+        }else{
+            return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Error!');
+        }
     }
 
     /**
@@ -260,7 +301,7 @@ class ReporteController extends Controller
 
         $validateUsersReport = Reporte::where('user_id',auth()->user()->id)->whereDate('created_at', Carbon::today())->count();
 
-        if($validateUsersReport >= env('REPORT_DIARY_USER')){
+        if($validateUsersReport >= 2){
             return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Solo puedes hacer 2 reportes diarios!');
         }
 
@@ -293,17 +334,17 @@ class ReporteController extends Controller
     {
 
         return Inertia::render('Reporte/Void',[
-            'fecha' => decrypt($date)
+            'fecha' => decrypt($date),
+            'maquinas' => Machine::orderBy('id', 'desc')->active()->get(),
         ]);
         
     }
 
     public function storeReporteNA(Request $request)
     {
-        
         $validateUsersReport = Reporte::where('user_id',auth()->user()->id)->whereDate('fecha', $request->fecha)->count();
         
-        if($validateUsersReport >= env('REPORT_DIARY_USER') && auth()->user()->isOperador()){
+        if($validateUsersReport >= 2 && auth()->user()->isOperador()){
             return redirect()->route('reporte.index')->with('class', 'bg-red-500')->with('message' , '¡Solo puedes hacer 2 reportes diarios!');
         }
         

@@ -20,6 +20,11 @@
                             <form @submit.prevent="storeData">
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
+                                        <jet-label for="maquina" value="Maquina (*)" />
+                                        <Select2 v-model="form.maquina_id" :options="maquinaOpt" :settings="{ dropdownAutoWidth: true,width: '100%' }"/>
+                                        <jet-input-error :message="errors.maquina_id" class="mt-2" />
+                                    </div>
+                                    <div>
                                         <jet-label for="fecha" value="Fecha (*)" />
                                         <span class="text-lg font-extrabold">{{  form.fecha_mostrar }}</span>
                                     </div>
@@ -64,6 +69,7 @@
     import JetInputError from '@/Jetstream/InputError'
     import JetInput from '@/Jetstream/Input'
     import JetLabel from '@/Jetstream/Label'
+    import Select2 from 'vue3-select2-component';
 
 
     export default {
@@ -72,10 +78,12 @@
             JetInputError,
             JetInput,
             JetLabel,
+            Select2
         },
         props: {
             errors: Object,
-            fecha : String
+            fecha : String,
+            maquinas : Object
         },
         setup(props) {
             
@@ -83,11 +91,17 @@
                     observacion : null,
                     fecha : props.fecha,
                     fecha_mostrar : props.fecha,
-                    tipo : null
+                    tipo : null,
+                    maquina_id : null
                 });
 
                 const validateObservacion = ref({
                     readonly : false
+                });
+
+                const maquinaOpt = [];
+                props.maquinas.forEach( function(element) {
+                    maquinaOpt.push({'id' : element.id,'text' : element.nombre})
                 });
 
                 const storeData = () => {
@@ -133,9 +147,15 @@
                 }
 
 
-                return {form,storeData,changeSelectTipo,validateObservacion}
+                return {form,storeData,changeSelectTipo,validateObservacion,maquinaOpt}
         }
     }
 
 </script>
+<style>
+    .select2-container .select2-selection--single {
+        height: 38px !important;
+        padding-top: 3px;
+    }
+</style>
 
